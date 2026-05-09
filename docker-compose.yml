@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sernapesca
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      # Se requiere crear un Dockerfile en /backend
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://user:password@database:5432/sernapesca?schema=public
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: ./frontend
+      # Se requiere crear un Dockerfile en /frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
