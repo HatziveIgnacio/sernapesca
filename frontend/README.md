@@ -1,16 +1,16 @@
-# Frontend
+# Sernapesca Hub (Frontend)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.9.
+Este directorio contiene la aplicación cliente construida en Angular.
 
-## Development server
+> **Importante:** Para instrucciones completas sobre cómo levantar todo el proyecto (incluyendo la API backend y la base de datos), por favor consulta el [README principal en la raíz del proyecto](../README.md).
 
-To start a local development server, run:
+## Ejecución en Modo Desarrollo
 
-```bash
-ng serve
-```
+Si solo deseas trabajar en el frontend:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Instala las dependencias: `npm install`
+2. Inicia el servidor de desarrollo: `npm start`
+3. Navega a `http://localhost:4200/`. La aplicación se recargará automáticamente cada vez que modifiques los archivos fuente.
 
 ## Code scaffolding
 
