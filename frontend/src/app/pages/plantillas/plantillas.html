@@ -1,0 +1,114 @@
+<div class="plantillas-container">
+
+  <div class="plantillas-header">
+    <h1>Gestión de Plantillas Mensuales</h1>
+    <p>Suba la plantilla Excel oficial de cada período para que los laboratorios puedan validar sus reportes.</p>
+  </div>
+
+  <!-- Formulario de subida -->
+  <div class="upload-card">
+    <h3 class="card-title">SUBIR NUEVA PLANTILLA</h3>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>Tipo de Plantilla</label>
+        <select [(ngModel)]="tipo" class="select-template">
+          <option value="RRA">RRA</option>
+          <option value="RRA_FAR">RRA FAR</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Año</label>
+        <input
+          type="number"
+          [ngModel]="anio"
+          (ngModelChange)="onAnioChange($event)"
+          min="2020"
+          [max]="anioActual"
+          class="input-field"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Mes</label>
+        <select [(ngModel)]="mes" class="select-template">
+          @for (m of mesesPermitidos; track m) {
+            <option [value]="m">{{ meses[m - 1] }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Archivo Excel</label>
+        <label class="file-btn" [class.has-file]="selectedFile !== null">
+          @if (selectedFile) {
+            ✓ {{ selectedFile.name }}
+          } @else {
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Seleccionar .xlsx / .xlsm
+          }
+          <input type="file" accept=".xlsx,.xlsm" (change)="onFileInput($event)" hidden />
+        </label>
+      </div>
+
+    </div>
+
+    @if (errorMessage) {
+      <div class="error-banner">⚠ {{ errorMessage }}</div>
+    }
+    @if (successMessage) {
+      <div class="success-banner">✓ {{ successMessage }}</div>
+    }
+
+    <div class="form-actions">
+      <button class="btn-primary" (click)="upload()" [disabled]="!selectedFile || isUploading">
+        @if (isUploading) { Subiendo... } @else { SUBIR PLANTILLA }
+      </button>
+    </div>
+  </div>
+
+  <!-- Listado de plantillas registradas -->
+  <div class="table-wrapper">
+    <h3 class="card-title">PLANTILLAS REGISTRADAS</h3>
+
+    @if (isLoading) {
+      <div class="table-loading">
+        <div class="spinner"></div>
+        <p>Cargando plantillas...</p>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Período</th>
+            <th>Archivo</th>
+            <th>Tamaño</th>
+            <th>Fecha Subida</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of plantillas; track p.id) {
+            <tr>
+              <td>
+                <span [class]="p.tipo === 'RRA' ? 'badge-rra' : 'badge-far'">{{ p.tipo }}</span>
+              </td>
+              <td>{{ getNombreMes(p.mes) }} {{ p.anio }}</td>
+              <td class="filename">{{ p.nombreArchivo }}</td>
+              <td>{{ formatBytes(p.tamanoBytes) }}</td>
+              <td>{{ p.fechaSubida | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td><button class="btn-outline" (click)="descargar(p)">Descargar</button></td>
+            </tr>
+          }
+          @empty {
+            <tr><td colspan="6" class="empty-table">No hay plantillas registradas aún</td></tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+</div>

@@ -1,0 +1,23 @@
+# Maven build output
+target/
+
+# Archivos subidos (plantillas, consolidados) — solo datos locales
+storage/
+
+# Logs
+*.log
+logs/
+
+# IDEs
+.idea/
+*.iml
+.vscode/*
+!.vscode/settings.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Variables de entorno
+.env
+.env.local
