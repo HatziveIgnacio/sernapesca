@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export type TemplateType = 'RRA' | 'RRA_FAR';
 
@@ -43,7 +44,10 @@ export class LaboratoriosService {
     return this.http.post<ValidationResult>(`${this.apiBase}/upload`, form);
   }
 
-  getTemplateUrl(templateType: TemplateType): string {
-    return `${this.apiBase}/template/${templateType}`;
+  downloadPlantilla(templateType: TemplateType): Observable<Blob> {
+    return this.http.get(
+      `${environment.javaApi}/plantillas/latest/${templateType}`,
+      { responseType: 'blob' }
+    );
   }
 }

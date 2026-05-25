@@ -150,8 +150,33 @@ export class Laboratorios {
     this.selectedErrorRow = null;
   }
 
+  isDownloadingTemplate = false;
+
   downloadTemplate() {
-    window.open(this.svc.getTemplateUrl(this.templateType), '_blank');
+    this.isDownloadingTemplate = true;
+    this.errorMessage = null;
+
+    this.svc.downloadPlantilla(this.templateType).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `plantilla_${this.templateType.toLowerCase()}.xlsx`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.isDownloadingTemplate = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isDownloadingTemplate = false;
+        if (err.status === 404) {
+          this.errorMessage = `No hay ninguna plantilla ${this.templateType} subida aún. Contacte a SERNAPESCA.`;
+        } else {
+          this.errorMessage = 'Error al descargar la plantilla. Intente nuevamente.';
+        }
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   setPage(page: number) {

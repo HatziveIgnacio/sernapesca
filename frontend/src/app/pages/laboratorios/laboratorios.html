@@ -10,7 +10,9 @@
         <option value="RRA">Plantilla RRA</option>
         <option value="RRA_FAR">Plantilla RRA FAR</option>
       </select>
-      <button class="btn-outline-dark" (click)="downloadTemplate()">DESCARGAR PLANTILLA</button>
+      <button class="btn-outline-dark" (click)="downloadTemplate()" [disabled]="isDownloadingTemplate">
+        {{ isDownloadingTemplate ? 'DESCARGANDO...' : 'DESCARGAR PLANTILLA' }}
+      </button>
       <button class="btn-primary">NUEVO REGISTRO</button>
     </div>
   </div>
