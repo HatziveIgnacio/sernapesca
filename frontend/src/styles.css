@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import '@gobdigital-cl/gob.cl/dist/css/gob.cl.css';
 
 * {
   box-sizing: border-box;
@@ -6,8 +7,321 @@
   padding: 0;
 }
 
+/* Preferir la tipografía del kit gov.cl si está disponible */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--gobcl-font-family-base, 'Inter', sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Variables y overrides clave importados desde public/custom.css (fall back si el kit no define tokens) */
+:root {
+    --primary: var(--gobcl-color-primary, #011f32);
+    --secondary: var(--gobcl-color-secondary, #1e3a8a);
+    --accent: var(--gobcl-color-accent, #60a5fa);
+    --success: var(--gobcl-color-success, #dcfce7);
+    --success-dark: var(--gobcl-color-success-dark, #166534);
+    --error: var(--gobcl-color-error, #fee2e2);
+    --error-dark: var(--gobcl-color-error-dark, #b91c1c);
+    --warning: var(--gobcl-color-warning, #fef3c7);
+    --warning-dark: var(--gobcl-color-warning-dark, #d97706);
+    --sidebar-width: 250px;
+    --header-height: 64px;
+    --footer-height: 100px;
+    --surface: #ffffff;
+    --surface-muted: #f8fafc;
+    --border-subtle: #e2e8f0;
+    --text-strong: #0f172a;
+    --text-muted: #64748b;
+    --focus-ring: rgba(1,31,50,0.12);
+}
+
+header.navbar {
+  background-color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: var(--header-height);
+    padding: 0 1.5rem;
+}
+
+header .navbar-brand {
+    font-weight: var(--gobcl-font-weight-strong, 600);
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+    font-family: var(--gobcl-font-family-heading, 'Roboto Slab', serif);
+    color: #e2e8f0;
+    text-decoration: none;
+}
+
+main h1, main h2 {
+    font-family: var(--gobcl-font-family-heading, 'Roboto Slab', serif);
+}
+
+/* Centralized button styles to override component duplicates */
+.btn-primary {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.625rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-outline,
+.btn-outline-secondary,
+.btn-outline-dark {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  color: #475569;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-outline,
+.btn-outline-secondary {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-outline-dark {
+  border-color: var(--text-strong);
+  color: var(--text-strong);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.btn:focus,
+.btn:focus-visible,
+.btn-outline:focus,
+.btn-outline-secondary:focus,
+.btn-outline-dark:focus,
+.page-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus-ring);
+  border-radius: 6px;
+}
+
+.card,
+.table-card,
+.table-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.card-title {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+  letter-spacing: 0.05em;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 1rem 1.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--surface-muted);
+  letter-spacing: 0.05em;
+}
+
+.data-table td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.875rem;
+  color: var(--text-strong);
+}
+
+.badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.badge-success,
+.badge-green,
+.validado {
+  background-color: var(--success);
+  color: var(--success-dark);
+}
+
+.badge-danger,
+.badge-red,
+.error-fecha,
+.error-campo {
+  background-color: var(--error);
+  color: var(--error-dark);
+}
+
+.badge-secondary,
+.reemplazado {
+  background-color: var(--border-subtle);
+  color: #475569;
+}
+
+.badge-primary {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.pagination {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination-info {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.page-btn {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  color: #475569;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.page-btn.active {
+  background-color: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-subtle);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-table {
+  text-align: center;
+  color: #94a3b8;
+  padding: 3rem 1.5rem;
+  font-size: 0.875rem;
+}
+
+button[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Utility: visually-hidden / screen-reader only */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Gov.cl integration hardening */
+h1, h2, h3,
+main h1, main h2 {
+  font-family: 'Roboto Slab', var(--font-family-sans-serif, sans-serif);
+}
+
+.btn {
+  min-height: 40px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  line-height: 1.25;
+  white-space: normal;
+}
+
+.btn svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  flex: 0 0 auto;
+}
+
+.btn [class^="cl-"],
+.btn [class*=" cl-"] {
+  width: 1rem;
+  height: 1rem;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.btn-outline-primary {
+  background: var(--surface);
+  border: 1px solid var(--secondary);
+  color: var(--secondary);
+  padding: 0.5rem 0.875rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.form-control,
+.custom-select,
+.input-field,
+.select-template {
+  min-height: 40px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-strong);
+  background-color: #fff;
+}
+
+.form-control:focus,
+.custom-select:focus,
+.input-field:focus,
+.select-template:focus {
+  border-color: #006fb3;
+  box-shadow: 0 0 0 0.2rem rgba(0,111,179,0.16);
+  outline: none;
+}
+

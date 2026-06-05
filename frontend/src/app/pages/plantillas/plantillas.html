@@ -12,28 +12,30 @@
     <div class="form-grid">
 
       <div class="form-group">
-        <label>Tipo de Plantilla</label>
-        <select [(ngModel)]="tipo" class="select-template">
+        <label for="tipo-plantilla">Tipo de Plantilla</label>
+        <select id="tipo-plantilla" [(ngModel)]="tipo" class="form-control select-template" aria-label="Tipo de plantilla">
           <option value="RRA">RRA</option>
           <option value="RRA_FAR">RRA FAR</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>Año</label>
+        <label for="anio-input">Año</label>
         <input
+          id="anio-input"
           type="number"
           [ngModel]="anio"
           (ngModelChange)="onAnioChange($event)"
           min="2020"
           [max]="anioActual"
           class="input-field"
+          aria-label="Año"
         />
       </div>
 
       <div class="form-group">
-        <label>Mes</label>
-        <select [(ngModel)]="mes" class="select-template">
+        <label for="mes-select">Mes</label>
+        <select id="mes-select" [(ngModel)]="mes" class="form-control select-template" aria-label="Mes">
           @for (m of mesesPermitidos; track m) {
             <option [value]="m">{{ meses[m - 1] }}</option>
           }
@@ -41,15 +43,15 @@
       </div>
 
       <div class="form-group">
-        <label>Archivo Excel</label>
-        <label class="file-btn" [class.has-file]="selectedFile !== null">
+        <label for="file-plantilla">Archivo Excel</label>
+        <label class="btn btn-outline-primary file-btn" [class.has-file]="selectedFile !== null" role="button" aria-label="Seleccionar archivo de plantilla" tabindex="0">
           @if (selectedFile) {
             ✓ {{ selectedFile.name }}
           } @else {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             Seleccionar .xlsx / .xlsm
           }
-          <input type="file" accept=".xlsx,.xlsm" (change)="onFileInput($event)" hidden />
+          <input id="file-plantilla" type="file" accept=".xlsx,.xlsm" (change)="onFileInput($event)" aria-label="Seleccionar archivo de plantilla" hidden />
         </label>
       </div>
 
@@ -63,7 +65,7 @@
     }
 
     <div class="form-actions">
-      <button class="btn-primary" (click)="upload()" [disabled]="!selectedFile || isUploading">
+      <button class="btn btn-primary" (click)="upload()" [disabled]="!selectedFile || isUploading">
         @if (isUploading) { Subiendo... } @else { SUBIR PLANTILLA }
       </button>
     </div>
@@ -94,13 +96,13 @@
           @for (p of plantillas; track p.id) {
             <tr>
               <td>
-                <span [class]="p.tipo === 'RRA' ? 'badge-rra' : 'badge-far'">{{ p.tipo }}</span>
+                <span [ngClass]="p.tipo === 'RRA' ? 'badge badge-primary' : 'badge badge-secondary'">{{ p.tipo }}</span>
               </td>
               <td>{{ getNombreMes(p.mes) }} {{ p.anio }}</td>
               <td class="filename">{{ p.nombreArchivo }}</td>
               <td>{{ formatBytes(p.tamanoBytes) }}</td>
               <td>{{ p.fechaSubida | date:'dd/MM/yyyy HH:mm' }}</td>
-              <td><button class="btn-outline" (click)="descargar(p)">Descargar</button></td>
+              <td><button class="btn btn-outline-secondary" (click)="descargar(p)">Descargar</button></td>
             </tr>
           }
           @empty {

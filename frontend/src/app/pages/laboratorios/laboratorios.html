@@ -6,14 +6,15 @@
       <p>Suba archivos CSV/Excel o ingrese registros manualmente para el cumplimiento normativo.</p>
     </div>
     <div class="header-actions">
-      <select class="select-template" (change)="onTemplateChange($any($event.target).value)">
+      <label for="select-template" class="sr-only">Seleccionar plantilla</label>
+      <select id="select-template" class="form-control select-template" (change)="onTemplateChange($any($event.target).value)" aria-label="Seleccionar plantilla">
         <option value="RRA">Plantilla RRA</option>
         <option value="RRA_FAR">Plantilla RRA FAR</option>
       </select>
-      <button class="btn-outline-dark" (click)="downloadTemplate()" [disabled]="isDownloadingTemplate">
+      <button type="button" class="btn btn-outline-dark" (click)="downloadTemplate()" [disabled]="isDownloadingTemplate" aria-label="Descargar plantilla">
         {{ isDownloadingTemplate ? 'DESCARGANDO...' : 'DESCARGAR PLANTILLA' }}
       </button>
-      <button class="btn-primary">NUEVO REGISTRO</button>
+      <button class="btn btn-primary">NUEVO REGISTRO</button>
     </div>
   </div>
 
@@ -53,11 +54,11 @@
         (drop)="onDrop($event)"
       >
         @if (selectedFile) {
-          <div class="file-preview">
+            <div class="file-preview">
             <div class="drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
             <h4>{{ selectedFile.name }}</h4>
             <p>{{ formatFileSize(selectedFile.size) }}</p>
-            <button class="btn-light-blue" (click)="resetUpload()">Quitar archivo</button>
+            <button class="btn btn-outline-primary" (click)="resetUpload()">Quitar archivo</button>
           </div>
         } @else {
           <div class="drop-icon">
@@ -65,9 +66,9 @@
           </div>
           <h4>Arrastre su archivo aquí</h4>
           <p>Soporta .CSV, .XLSX hasta 25MB</p>
-          <label class="btn-light-blue">
+          <label class="btn btn-outline-primary" role="button" aria-label="Seleccionar archivo" tabindex="0">
             Seleccionar Archivo
-            <input type="file" accept=".xlsx,.xlsm,.csv" (change)="onFileInput($event)" hidden />
+            <input type="file" accept=".xlsx,.xlsm,.csv" (change)="onFileInput($event)" aria-label="Seleccionar archivo" hidden />
           </label>
         }
       </div>
@@ -103,9 +104,15 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input type="text" placeholder="Buscar por Folio, Especie o ID..." (input)="onSearch($any($event.target).value)" />
         </div>
-        <div class="toolbar-actions">
-          <button class="btn-outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg> Filtrar</button>
-          <button class="btn-outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg> Ordenar</button>
+          <div class="toolbar-actions">
+          <button type="button" class="btn btn-outline-secondary" aria-label="Filtrar" title="Filtrar">
+            <span class="cl-filter" aria-hidden="true"></span>
+            Filtrar
+          </button>
+          <button type="button" class="btn btn-outline-secondary" aria-label="Ordenar" title="Ordenar">
+            <span class="cl-burger" aria-hidden="true"></span>
+            Ordenar
+          </button>
         </div>
       </div>
 
@@ -129,7 +136,7 @@
             </thead>
             <tbody>
               @for (row of pagedRows; track row.rowNumber) {
-                <tr [class.row-error]="!row.isValid" [class.row-selected]="selectedErrorRow?.rowNumber === row.rowNumber" (click)="selectRow(row)" style="cursor: pointer">
+                <tr [class.row-error]="!row.isValid" [class.row-selected]="selectedErrorRow?.rowNumber === row.rowNumber" (click)="selectRow(row)" tabindex="0" role="button" (keydown.enter)="selectRow(row)" style="cursor: pointer">
                   <td>
                     @if (!row.isValid) { <span class="error-icon">!</span> }
                     {{ row.display.codigoMuestra !== '—' ? row.display.codigoMuestra : row.display.nInforme }}
@@ -139,9 +146,9 @@
                   <td>{{ row.display.valorObtenido }}</td>
                   <td>
                     @if (row.isValid) {
-                      <span class="badge validado">VALIDADO</span>
+                      <span class="badge badge-success" aria-label="Validado">VALIDADO</span>
                     } @else {
-                      <span class="badge error-fecha" [title]="getErrorSummary(row)">
+                      <span class="badge badge-danger" [title]="getErrorSummary(row)" aria-label="Errores">
                         {{ row.errors.length }} ERROR{{ row.errors.length !== 1 ? 'ES' : '' }}
                       </span>
                     }
@@ -212,18 +219,18 @@
       {{ validationResult?.errorRows ?? 0 }} Pendientes
     </span>
   </div>
-  <div class="bar-right">
+      <div class="bar-right">
     @if (selectedFile && !validationResult && !isLoading) {
-      <button class="btn-outline-dark" (click)="resetUpload()">CANCELAR CARGA</button>
-      <button class="btn-primary" (click)="validate()">VALIDAR ARCHIVO</button>
+      <button class="btn btn-outline-dark" (click)="resetUpload()">CANCELAR CARGA</button>
+      <button class="btn btn-primary" (click)="validate()">VALIDAR ARCHIVO</button>
     } @else if (validationResult) {
-      <button class="btn-outline-dark" (click)="resetUpload()">NUEVA CARGA</button>
+      <button class="btn btn-outline-dark" (click)="resetUpload()">NUEVA CARGA</button>
       @if (validationResult.errorRows === 0) {
-        <button class="btn-primary">FINALIZAR Y SUBIR DATOS</button>
+        <button class="btn btn-primary">FINALIZAR Y SUBIR DATOS</button>
       }
     } @else {
-      <button class="btn-outline-dark" disabled>CANCELAR CARGA</button>
-      <button class="btn-primary" disabled>FINALIZAR Y SUBIR DATOS</button>
+      <button class="btn btn-outline-dark" disabled>CANCELAR CARGA</button>
+      <button class="btn btn-primary" disabled>FINALIZAR Y SUBIR DATOS</button>
     }
   </div>
 </div>

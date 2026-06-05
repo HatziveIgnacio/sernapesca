@@ -18,20 +18,6 @@
   margin: 0;
 }
 
-.btn-primary {
-  background-color: #011f32;
-  color: white;
-  border: none;
-  padding: 0.625rem 1rem;
-  border-radius: 4px;
-  font-weight: 500;
-  font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  letter-spacing: 0.05em;
-}
 .btn-primary svg { width: 16px; height: 16px; }
 
 .kpi-grid {
@@ -92,7 +78,7 @@
   font-weight: 700;
   margin: 0;
 }
-.text-red { color: #b91c1c !important; }
+.text-red { color: #b91c1c; }
 
 .progress-bar {
   background-color: #f1f5f9;
@@ -133,6 +119,12 @@
   gap: 0.5rem;
 }
 
+.table-actions .btn {
+  min-width: 104px;
+  min-height: 40px;
+  padding: 0.5rem 0.75rem;
+}
+
 .btn-outline {
   background: white;
   border: 1px solid #e2e8f0;
@@ -171,8 +163,8 @@
   font-weight: 500;
 }
 .id-col {
-  color: #0f172a !important;
-  font-weight: 600 !important;
+  color: #0f172a;
+  font-weight: 600;
 }
 
 .status-badge {
@@ -236,6 +228,8 @@
   font-size: 0.75rem;
   border-top: 1px solid #e2e8f0;
   padding-top: 1rem;
+  background: transparent;
+  min-height: auto;
 }
 .footer-links {
   display: flex;
