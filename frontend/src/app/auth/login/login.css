@@ -7,7 +7,7 @@
 /* LEFT PANEL */
 .left-panel {
   flex: 0 0 45%;
-  background-color: #011f32;
+  background-color: var(--primary);
   color: white;
   display: flex;
   flex-direction: column;
@@ -15,6 +15,28 @@
   padding: 4rem;
   position: relative;
   overflow: hidden;
+}
+
+.gov-brand {
+  display: flex;
+  width: 92px;
+  height: 6px;
+  margin-bottom: 2rem;
+}
+
+.brand-bar {
+  display: block;
+  height: 100%;
+}
+
+.brand-bar.blue {
+  width: 60%;
+  background: #006fb3;
+}
+
+.brand-bar.red {
+  width: 40%;
+  background: #fe6565;
 }
 
 .bg-pattern {
@@ -100,26 +122,26 @@
 
 .image-container {
   width: 100%;
-  height: 200px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  margin-top: 1rem;
 }
 
 .mock-image {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, #475569, #1e293b);
-  position: relative;
+  display: none;
 }
-.mock-image::after {
-  content: "Imagen de puerto...";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: rgba(255,255,255,0.2);
-  font-weight: bold;
+
+.institutional-card {
+  border-left: 4px solid #fe6565;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  line-height: 1.5;
+}
+
+.institutional-card span {
+  color: #cbd5e1;
+  font-size: 0.875rem;
 }
 
 .footer-left {
@@ -138,7 +160,7 @@
 /* RIGHT PANEL */
 .right-panel {
   flex: 1;
-  background-color: #ffffff;
+  background-color: #f8f9fa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,6 +170,7 @@
 .login-form-container {
   width: 100%;
   max-width: 420px;
+  padding: 2rem;
 }
 
 .login-header {
@@ -195,18 +218,8 @@
 .input-wrapper input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 2.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
   font-size: 1rem;
   color: #111827;
-  transition: border-color 0.2s;
-  font-family: inherit;
-}
-
-.input-wrapper input:focus {
-  outline: none;
-  border-color: #011f32;
-  box-shadow: 0 0 0 3px rgba(1, 31, 50, 0.1);
 }
 
 .icon-button {
@@ -242,14 +255,6 @@
   align-items: center;
   margin-bottom: 2rem;
   font-size: 0.875rem;
-}
-
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #4b5563;
-  cursor: pointer;
 }
 
 .forgot-password {

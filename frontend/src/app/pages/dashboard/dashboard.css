@@ -119,6 +119,12 @@
   gap: 0.5rem;
 }
 
+.table-actions .btn {
+  min-width: 104px;
+  min-height: 40px;
+  padding: 0.5rem 0.75rem;
+}
+
 .btn-outline {
   background: white;
   border: 1px solid #e2e8f0;
@@ -222,6 +228,8 @@
   font-size: 0.75rem;
   border-top: 1px solid #e2e8f0;
   padding-top: 1rem;
+  background: transparent;
+  min-height: auto;
 }
 .footer-links {
   display: flex;
