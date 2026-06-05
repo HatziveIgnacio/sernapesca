@@ -3,7 +3,7 @@
     <h1>Resumen Operativo</h1>
     <p>Control y seguimiento de muestras biológicas y registros de laboratorio.</p>
   </div>
-  <button class="btn-primary">
+  <button class="btn btn-primary">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
     CARGAR NUEVO REGISTRO
   </button>
@@ -16,7 +16,7 @@
       <div class="kpi-icon blue-bg">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
       </div>
-      <span class="badge badge-green">+12% vs mes anterior</span>
+      <span class="badge badge-success">+12% vs mes anterior</span>
     </div>
     <div class="kpi-content">
       <p>TOTAL ENVÍOS</p>
@@ -44,7 +44,7 @@
       <div class="kpi-icon red-bg">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
       </div>
-      <span class="badge badge-red">Prioridad Alta</span>
+      <span class="badge badge-danger">Prioridad Alta</span>
     </div>
     <div class="kpi-content">
       <p>CON ERRORES</p>
@@ -57,8 +57,8 @@
   <div class="table-header">
     <h2>Envíos Recientes</h2>
     <div class="table-actions">
-      <button class="btn-outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg> Filtrar</button>
-      <button class="btn-outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Exportar</button>
+      <button class="btn btn-outline-secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg> Filtrar</button>
+      <button class="btn btn-outline-secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Exportar</button>
     </div>
   </div>
 
@@ -77,28 +77,28 @@
         <td class="id-col">#SP-2024-001</td>
         <td>24 Oct, 2023 | 14:20</td>
         <td><span class="type-icon">💧</span> Calidad del Agua</td>
-        <td><span class="status-badge validado">VALIDADO</span></td>
+        <td><span class="badge badge-success">VALIDADO</span></td>
         <td><a href="#" class="action-link">Ver Detalle</a></td>
       </tr>
       <tr>
         <td class="id-col">#SP-2024-002</td>
         <td>24 Oct, 2023 | 12:45</td>
         <td><span class="type-icon">🦠</span> Muestreo Patológico</td>
-        <td><span class="status-badge errores">CON ERRORES</span></td>
+        <td><span class="badge badge-danger">CON ERRORES</span></td>
         <td><a href="#" class="action-link text-red">Corregir</a></td>
       </tr>
       <tr>
         <td class="id-col">#SP-2024-003</td>
         <td>23 Oct, 2023 | 09:15</td>
         <td><span class="type-icon">📦</span> Control de Carga</td>
-        <td><span class="status-badge reemplazado">REEMPLAZADO</span></td>
+        <td><span class="badge badge-secondary">REEMPLAZADO</span></td>
         <td><a href="#" class="action-link">Historial</a></td>
       </tr>
       <tr>
         <td class="id-col">#SP-2024-004</td>
         <td>22 Oct, 2023 | 16:30</td>
         <td><span class="type-icon">⚖️</span> Talla y Peso</td>
-        <td><span class="status-badge validado">VALIDADO</span></td>
+        <td><span class="badge badge-success">VALIDADO</span></td>
         <td><a href="#" class="action-link">Ver Detalle</a></td>
       </tr>
     </tbody>

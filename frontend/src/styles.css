@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import '@gobdigital-cl/gob.cl/dist/css/gob.cl.css';
 
 * {
   box-sizing: border-box;
@@ -6,8 +7,74 @@
   padding: 0;
 }
 
+/* Preferir la tipografía del kit gov.cl si está disponible */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--gobcl-font-family-base, 'Inter', sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Variables y overrides clave importados desde public/custom.css (fall back si el kit no define tokens) */
+:root {
+    --primary: var(--gobcl-color-primary, #011f32);
+    --secondary: var(--gobcl-color-secondary, #1e3a8a);
+    --accent: var(--gobcl-color-accent, #60a5fa);
+    --success: var(--gobcl-color-success, #dcfce7);
+    --success-dark: var(--gobcl-color-success-dark, #166534);
+    --error: var(--gobcl-color-error, #fee2e2);
+    --error-dark: var(--gobcl-color-error-dark, #b91c1c);
+    --warning: var(--gobcl-color-warning, #fef3c7);
+    --warning-dark: var(--gobcl-color-warning-dark, #d97706);
+    --sidebar-width: 250px;
+    --header-height: 64px;
+    --footer-height: 100px;
+}
+
+header.navbar {
+  background-color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: var(--header-height);
+    padding: 0 1.5rem;
+}
+
+header .navbar-brand {
+    font-weight: var(--gobcl-font-weight-strong, 600);
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+    font-family: var(--gobcl-font-family-heading, 'Roboto Slab', serif);
+    color: #e2e8f0;
+    text-decoration: none;
+}
+
+main h1, main h2 {
+    font-family: var(--gobcl-font-family-heading, 'Roboto Slab', serif);
+}
+
+/* Centralized button styles to override component duplicates */
+.btn-primary {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.625rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Utility: visually-hidden / screen-reader only */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+

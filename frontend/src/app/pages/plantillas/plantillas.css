@@ -249,6 +249,16 @@
 }
 .btn-outline:hover { border-color: #3b82f6; color: #2563eb; }
 
+/* Focus visible for keyboard users */
+.btn-primary:focus,
+.btn-primary:focus-visible,
+.btn-outline:focus,
+.file-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(1,31,50,0.12);
+  border-radius: 8px;
+}
+
 /* ── Spinner ─────────────────────────────────────────────────────────────── */
 .table-loading {
   display: flex;

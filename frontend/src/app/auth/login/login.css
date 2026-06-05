@@ -226,6 +226,16 @@
   height: 20px;
 }
 
+/* Focus styles for keyboard users */
+.icon-button:focus,
+.btn:focus,
+.btn:focus-visible,
+.page-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(1,31,50,0.12);
+  border-radius: 6px;
+}
+
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -252,33 +262,7 @@
   text-decoration: underline;
 }
 
-.btn-primary {
-  width: 100%;
-  background-color: #011f32;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.875rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 0.2s;
-  font-family: inherit;
-  margin-bottom: 2rem;
-}
-
-.btn-primary:hover {
-  background-color: #022b42;
-}
-
-.btn-primary svg {
-  width: 18px;
-  height: 18px;
-}
+.btn-primary svg { width: 18px; height: 18px; }
 
 .info-box {
   background-color: #f8fafc;
