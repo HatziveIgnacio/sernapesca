@@ -63,6 +63,7 @@
       <groupId>com.microsoft.sqlserver</groupId>
       <artifactId>mssql-jdbc</artifactId>
       <version>12.2.0.jre21</version>
+      <scope>runtime</scope>
     </dependency>
 
     <!-- Validación: @NotNull, @NotBlank, etc. -->
