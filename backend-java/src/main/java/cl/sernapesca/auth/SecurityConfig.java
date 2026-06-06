@@ -15,14 +15,8 @@ import cl.sernapesca.usuario.UsuarioRepository;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, ExternalAuthFilter externalAuthFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, ExternalAuthFilter externalAuthFilter, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
             .csrf().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
