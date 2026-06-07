@@ -35,7 +35,7 @@ export interface ValidationResult {
 @Injectable({ providedIn: 'root' })
 export class LaboratoriosService {
   private readonly http = inject(HttpClient);
-  private readonly apiBase = 'http://localhost:3000/laboratorios';
+  private readonly apiBase = `${environment.nestApi}/laboratorios`;
 
   uploadFile(file: File, templateType: TemplateType): Observable<ValidationResult> {
     const form = new FormData();

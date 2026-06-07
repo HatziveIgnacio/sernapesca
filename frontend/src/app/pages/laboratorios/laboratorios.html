@@ -1,31 +1,33 @@
-<div class="lab-container">
-  <!-- Encabezado -->
-  <div class="lab-header">
-    <div class="header-titles">
-      <h1>Carga de Datos de Laboratorio</h1>
-      <p>Suba archivos CSV/Excel o ingrese registros manualmente para el cumplimiento normativo.</p>
+<section class="app-section lab-container">
+  <div class="section-heading lab-header">
+    <div>
+      <h1 class="line line-primary">Carga de Datos de Laboratorio</h1>
+      <p>Suba archivos CSV/Excel para validar reportes de acuerdo con la plantilla institucional vigente.</p>
     </div>
+
     <div class="header-actions">
       <label for="select-template" class="sr-only">Seleccionar plantilla</label>
-      <select id="select-template" class="form-control select-template" (change)="onTemplateChange($any($event.target).value)" aria-label="Seleccionar plantilla">
+      <select id="select-template" class="form-control select-template" (change)="onTemplateChange($any($event.target).value)">
         <option value="RRA">Plantilla RRA</option>
         <option value="RRA_FAR">Plantilla RRA FAR</option>
       </select>
-      <button type="button" class="btn btn-outline-dark" (click)="downloadTemplate()" [disabled]="isDownloadingTemplate" aria-label="Descargar plantilla">
-        {{ isDownloadingTemplate ? 'DESCARGANDO...' : 'DESCARGAR PLANTILLA' }}
+      <button type="button" class="btn btn-outline-secondary" (click)="downloadTemplate()" [disabled]="isDownloadingTemplate">
+        <span class="cl cl-download" aria-hidden="true"></span>
+        {{ isDownloadingTemplate ? 'Descargando...' : 'Descargar plantilla' }}
       </button>
-      <button class="btn btn-primary">NUEVO REGISTRO</button>
+      <button type="button" class="btn btn-primary">
+        <span class="cl cl-add-circle-line" aria-hidden="true"></span>
+        Nuevo registro
+      </button>
     </div>
   </div>
 
   <div class="lab-content">
-    <!-- Columna Izquierda -->
-    <div class="left-col">
-      <!-- Stepper -->
-      <div class="card stepper-card">
-        <h3 class="card-title">PROGRESO DE CARGA</h3>
-        <ul class="stepper-list">
-          <li class="step" [class.active]="currentStep === 1" [class.done]="currentStep > 1" [class.inactive]="currentStep < 1">
+    <aside class="left-col" aria-label="Progreso y archivo seleccionado">
+      <section class="card stepper-card">
+        <h2 class="card-title">Progreso de carga</h2>
+        <ol class="stepper-list">
+          <li class="step" [class.active]="currentStep === 1" [class.done]="currentStep > 1">
             <span class="step-circle">{{ currentStep > 1 ? '✓' : '1' }}</span>
             <span class="step-text">Carga de Archivo</span>
           </li>
@@ -41,83 +43,78 @@
             <span class="step-circle">4</span>
             <span class="step-text">Confirmación</span>
           </li>
-        </ul>
-      </div>
+        </ol>
+      </section>
 
-      <!-- Dropzone -->
-      <div
+      <section
         class="dropzone"
         [class.drag-over]="isDragOver"
         [class.has-file]="selectedFile !== null"
         (dragover)="onDragOver($event)"
         (dragleave)="onDragLeave()"
         (drop)="onDrop($event)"
+        aria-label="Carga de archivo"
       >
         @if (selectedFile) {
-            <div class="file-preview">
-            <div class="drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
-            <h4>{{ selectedFile.name }}</h4>
+          <div class="file-preview">
+            <div class="drop-icon" aria-hidden="true"><span class="cl cl-document-verified"></span></div>
+            <h3>{{ selectedFile.name }}</h3>
             <p>{{ formatFileSize(selectedFile.size) }}</p>
-            <button class="btn btn-outline-primary" (click)="resetUpload()">Quitar archivo</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="resetUpload()">Quitar archivo</button>
           </div>
         } @else {
-          <div class="drop-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-          </div>
-          <h4>Arrastre su archivo aquí</h4>
-          <p>Soporta .CSV, .XLSX hasta 25MB</p>
-          <label class="btn btn-outline-primary" role="button" aria-label="Seleccionar archivo" tabindex="0">
-            Seleccionar Archivo
-            <input type="file" accept=".xlsx,.xlsm,.csv" (change)="onFileInput($event)" aria-label="Seleccionar archivo" hidden />
+          <div class="drop-icon" aria-hidden="true"><span class="cl cl-download"></span></div>
+          <h3>Arrastre su archivo aquí</h3>
+          <p>Soporta .csv, .xlsx y .xlsm hasta 25 MB.</p>
+          <label class="btn btn-outline-secondary file-btn" role="button" tabindex="0">
+            <span class="cl cl-add-circle-line" aria-hidden="true"></span>
+            Seleccionar archivo
+            <input type="file" accept=".xlsx,.xlsm,.csv" (change)="onFileInput($event)" hidden />
           </label>
         }
-      </div>
+      </section>
 
       @if (errorMessage) {
-        <div class="error-banner">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-          {{ errorMessage }}
+        <div class="error-banner" role="alert">
+          <span class="cl cl-call-info" aria-hidden="true"></span>
+          <span>{{ errorMessage }}</span>
         </div>
       }
 
-      <!-- Resumen de Sesión -->
-      <div class="session-card">
-        <h5>RESUMEN DE SESIÓN</h5>
+      <section class="session-card">
+        <h2 class="card-title">Resumen de sesión</h2>
         <div class="session-stats">
           <div class="stat-box">
-            <h2>{{ validationResult?.totalRows ?? 0 }}</h2>
-            <p>REGISTROS<br>TOTALES</p>
+            <strong>{{ validationResult?.totalRows ?? 0 }}</strong>
+            <span>Registros totales</span>
           </div>
           <div class="stat-box">
-            <h2 class="text-pink">{{ validationResult?.errorRows ?? 0 }}</h2>
-            <p>CON ERRORES</p>
+            <strong class="text-danger">{{ validationResult?.errorRows ?? 0 }}</strong>
+            <span>Con errores</span>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </aside>
 
-    <!-- Columna Derecha -->
     <div class="right-col">
-      <!-- Toolbar -->
-      <div class="toolbar card">
-        <div class="search-input">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" placeholder="Buscar por Folio, Especie o ID..." (input)="onSearch($any($event.target).value)" />
-        </div>
-          <div class="toolbar-actions">
-          <button type="button" class="btn btn-outline-secondary" aria-label="Filtrar" title="Filtrar">
-            <span class="cl-filter" aria-hidden="true"></span>
+      <section class="toolbar card" aria-label="Herramientas de búsqueda">
+        <label class="search-input" for="search-validation">
+          <span class="cl cl-search" aria-hidden="true"></span>
+          <input id="search-validation" type="search" placeholder="Buscar por folio, muestra o análisis" (input)="onSearch($any($event.target).value)" />
+        </label>
+        <div class="toolbar-actions">
+          <button type="button" class="btn btn-outline-secondary">
+            <span class="cl cl-filter" aria-hidden="true"></span>
             Filtrar
           </button>
-          <button type="button" class="btn btn-outline-secondary" aria-label="Ordenar" title="Ordenar">
-            <span class="cl-burger" aria-hidden="true"></span>
+          <button type="button" class="btn btn-outline-secondary">
+            <span class="cl cl-list" aria-hidden="true"></span>
             Ordenar
           </button>
         </div>
-      </div>
+      </section>
 
-      <!-- Tabla -->
-      <div class="card table-wrapper">
+      <section class="card table-wrapper" aria-label="Resultado de validación">
         @if (isLoading) {
           <div class="table-loading">
             <div class="spinner"></div>
@@ -127,18 +124,18 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>ID MUESTRA</th>
-                <th>FECHA MUESTREO</th>
-                <th>ANÁLISIS</th>
-                <th>VALOR OBTENIDO</th>
-                <th>ESTADO</th>
+                <th>ID muestra</th>
+                <th>Fecha muestreo</th>
+                <th>Análisis</th>
+                <th>Valor obtenido</th>
+                <th>Estado</th>
               </tr>
             </thead>
             <tbody>
               @for (row of pagedRows; track row.rowNumber) {
-                <tr [class.row-error]="!row.isValid" [class.row-selected]="selectedErrorRow?.rowNumber === row.rowNumber" (click)="selectRow(row)" tabindex="0" role="button" (keydown.enter)="selectRow(row)" style="cursor: pointer">
+                <tr [class.row-error]="!row.isValid" [class.row-selected]="selectedErrorRow?.rowNumber === row.rowNumber" (click)="selectRow(row)" tabindex="0" role="button" (keydown.enter)="selectRow(row)">
                   <td>
-                    @if (!row.isValid) { <span class="error-icon">!</span> }
+                    @if (!row.isValid) { <span class="error-icon" aria-hidden="true">!</span> }
                     {{ row.display.codigoMuestra !== '—' ? row.display.codigoMuestra : row.display.nInforme }}
                   </td>
                   <td>{{ row.display.fechaMuestreo }}</td>
@@ -146,10 +143,10 @@
                   <td>{{ row.display.valorObtenido }}</td>
                   <td>
                     @if (row.isValid) {
-                      <span class="badge badge-success" aria-label="Validado">VALIDADO</span>
+                      <span class="badge badge-success">Validado</span>
                     } @else {
-                      <span class="badge badge-danger" [title]="getErrorSummary(row)" aria-label="Errores">
-                        {{ row.errors.length }} ERROR{{ row.errors.length !== 1 ? 'ES' : '' }}
+                      <span class="badge badge-danger" [title]="getErrorSummary(row)">
+                        {{ row.errors.length }} error{{ row.errors.length !== 1 ? 'es' : '' }}
                       </span>
                     }
                   </td>
@@ -159,9 +156,9 @@
                 <tr>
                   <td colspan="5" class="empty-table">
                     @if (validationResult) {
-                      No hay registros que coincidan con la búsqueda
+                      No hay registros que coincidan con la búsqueda.
                     } @else {
-                      Cargue un archivo para ver los registros
+                      Cargue un archivo para ver los registros.
                     }
                   </td>
                 </tr>
@@ -172,65 +169,68 @@
           <div class="pagination">
             <span class="pagination-info">Mostrando {{ paginationLabel }} registros</span>
             <div class="pagination-controls">
-              <button class="page-btn" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">&lt;</button>
+              <button type="button" class="page-btn" (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1" aria-label="Página anterior">
+                <span class="cl cl-m-arrow-left" aria-hidden="true"></span>
+              </button>
               @for (p of visiblePages; track p) {
                 @if (p === -1) {
-                  <span class="page-ellipsis">…</span>
+                  <span class="page-ellipsis">...</span>
                 } @else {
-                  <button class="page-btn" [class.active]="p === currentPage" (click)="setPage(p)">{{ p }}</button>
+                  <button type="button" class="page-btn" [class.active]="p === currentPage" [attr.aria-current]="p === currentPage ? 'page' : null" (click)="setPage(p)">{{ p }}</button>
                 }
               }
-              <button class="page-btn" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">&gt;</button>
+              <button type="button" class="page-btn" (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages" aria-label="Página siguiente">
+                <span class="cl cl-m-arrow-right" aria-hidden="true"></span>
+              </button>
             </div>
           </div>
         }
-      </div>
+      </section>
 
-      <!-- Panel Corrección Rápida / Detalle de errores -->
       @if (selectedErrorRow) {
-        <div class="card correction-panel">
+        <section class="card correction-panel" aria-live="polite">
           <div class="panel-header">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-            <h3>Errores — Fila {{ selectedErrorRow.rowNumber }} ({{ selectedErrorRow.display.codigoMuestra }})</h3>
-            <button class="help-btn" (click)="selectedErrorRow = null">✕</button>
+            <span class="cl cl-call-info" aria-hidden="true"></span>
+            <h2>Errores - Fila {{ selectedErrorRow.rowNumber }} ({{ selectedErrorRow.display.codigoMuestra }})</h2>
+            <button type="button" class="help-btn" (click)="selectedErrorRow = null" aria-label="Cerrar detalle">
+              <span class="cl cl-close" aria-hidden="true"></span>
+            </button>
           </div>
           <div class="panel-body">
             <ul class="error-detail-list-inline">
               @for (e of selectedErrorRow.errors; track e.column) {
-                <li><strong>Col. {{ e.column }} — {{ e.field }}</strong>: {{ e.message }}</li>
+                <li><strong>Col. {{ e.column }} - {{ e.field }}</strong>: {{ e.message }}</li>
               }
             </ul>
           </div>
-        </div>
+        </section>
       }
     </div>
   </div>
-</div>
+</section>
 
-<!-- Sticky Bottom Footer -->
-<div class="bottom-action-bar">
+<footer class="bottom-action-bar">
   <div class="bar-left">
     <span class="status-ok">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-      {{ validationResult?.validRows ?? 0 }} Válidos
+      <span class="cl cl-ok" aria-hidden="true"></span>
+      {{ validationResult?.validRows ?? 0 }} válidos
     </span>
     <span class="status-warn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-      {{ validationResult?.errorRows ?? 0 }} Pendientes
+      <span class="cl cl-call-info" aria-hidden="true"></span>
+      {{ validationResult?.errorRows ?? 0 }} pendientes
     </span>
   </div>
-      <div class="bar-right">
+  <div class="bar-right">
     @if (selectedFile && !validationResult && !isLoading) {
-      <button class="btn btn-outline-dark" (click)="resetUpload()">CANCELAR CARGA</button>
-      <button class="btn btn-primary" (click)="validate()">VALIDAR ARCHIVO</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="resetUpload()">Cancelar carga</button>
+      <button type="button" class="btn btn-primary" (click)="validate()">Validar archivo</button>
     } @else if (validationResult) {
-      <button class="btn btn-outline-dark" (click)="resetUpload()">NUEVA CARGA</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="resetUpload()">Nueva carga</button>
       @if (validationResult.errorRows === 0) {
-        <button class="btn btn-primary">FINALIZAR Y SUBIR DATOS</button>
+        <button type="button" class="btn btn-primary">Finalizar y subir datos</button>
       }
     } @else {
-      <button class="btn btn-outline-dark" disabled>CANCELAR CARGA</button>
-      <button class="btn btn-primary" disabled>FINALIZAR Y SUBIR DATOS</button>
+      <button type="button" class="btn btn-primary" disabled>Finalizar y subir datos</button>
     }
   </div>
-</div>
+</footer>

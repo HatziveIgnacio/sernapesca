@@ -1,8 +1,13 @@
-<section class="placeholder-page">
-  <div class="placeholder-panel">
-    <p class="eyebrow">Sernapesca Hub</p>
-    <h1>{{ title }}</h1>
-    <p>{{ description }}</p>
-    <a routerLink="/dashboard" class="btn btn-primary">Volver al dashboard</a>
+<section class="app-section placeholder-page">
+  <div class="section-heading">
+    <div>
+      <h1 class="line line-primary">{{ title }}</h1>
+      <p>{{ description }}</p>
+    </div>
   </div>
+
+  <a routerLink="/dashboard" class="btn btn-primary">
+    <span class="cl cl-m-arrow-left" aria-hidden="true"></span>
+    Volver al dashboard
+  </a>
 </section>

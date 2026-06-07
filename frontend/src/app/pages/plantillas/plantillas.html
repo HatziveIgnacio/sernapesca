@@ -1,19 +1,18 @@
-<div class="plantillas-container">
-
-  <div class="plantillas-header">
-    <h1>Gestión de Plantillas Mensuales</h1>
-    <p>Suba la plantilla Excel oficial de cada período para que los laboratorios puedan validar sus reportes.</p>
+<section class="app-section plantillas-container">
+  <div class="section-heading">
+    <div>
+      <h1 class="line line-primary">Gestión de Plantillas Mensuales</h1>
+      <p>Suba la plantilla Excel oficial de cada período para que los laboratorios validen sus reportes.</p>
+    </div>
   </div>
 
-  <!-- Formulario de subida -->
-  <div class="upload-card">
-    <h3 class="card-title">SUBIR NUEVA PLANTILLA</h3>
+  <section class="upload-card" aria-labelledby="upload-template-title">
+    <h2 id="upload-template-title" class="card-title">Subir nueva plantilla</h2>
 
     <div class="form-grid">
-
       <div class="form-group">
-        <label for="tipo-plantilla">Tipo de Plantilla</label>
-        <select id="tipo-plantilla" [(ngModel)]="tipo" class="form-control select-template" aria-label="Tipo de plantilla">
+        <label for="tipo-plantilla">Tipo de plantilla</label>
+        <select id="tipo-plantilla" [(ngModel)]="tipo" class="form-control select-template">
           <option value="RRA">RRA</option>
           <option value="RRA_FAR">RRA FAR</option>
         </select>
@@ -28,52 +27,63 @@
           (ngModelChange)="onAnioChange($event)"
           min="2020"
           [max]="anioActual"
-          class="input-field"
-          aria-label="Año"
+          class="form-control input-field"
         />
       </div>
 
       <div class="form-group">
         <label for="mes-select">Mes</label>
-        <select id="mes-select" [(ngModel)]="mes" class="form-control select-template" aria-label="Mes">
+        <select id="mes-select" [(ngModel)]="mes" class="form-control select-template">
           @for (m of mesesPermitidos; track m) {
             <option [value]="m">{{ meses[m - 1] }}</option>
           }
         </select>
       </div>
 
-      <div class="form-group">
+      <div class="form-group file-group">
         <label for="file-plantilla">Archivo Excel</label>
-        <label class="btn btn-outline-primary file-btn" [class.has-file]="selectedFile !== null" role="button" aria-label="Seleccionar archivo de plantilla" tabindex="0">
+        <label class="btn btn-outline-secondary file-btn" [class.has-file]="selectedFile !== null" role="button" tabindex="0">
           @if (selectedFile) {
-            ✓ {{ selectedFile.name }}
+            <span class="cl cl-ok" aria-hidden="true"></span>
+            {{ selectedFile.name }}
           } @else {
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span class="cl cl-download" aria-hidden="true"></span>
             Seleccionar .xlsx / .xlsm
           }
-          <input id="file-plantilla" type="file" accept=".xlsx,.xlsm" (change)="onFileInput($event)" aria-label="Seleccionar archivo de plantilla" hidden />
+          <input id="file-plantilla" type="file" accept=".xlsx,.xlsm" (change)="onFileInput($event)" hidden />
         </label>
       </div>
-
     </div>
 
     @if (errorMessage) {
-      <div class="error-banner">⚠ {{ errorMessage }}</div>
+      <div class="error-banner" role="alert">
+        <span class="cl cl-call-info" aria-hidden="true"></span>
+        {{ errorMessage }}
+      </div>
     }
     @if (successMessage) {
-      <div class="success-banner">✓ {{ successMessage }}</div>
+      <div class="success-banner" role="status">
+        <span class="cl cl-ok" aria-hidden="true"></span>
+        {{ successMessage }}
+      </div>
     }
 
     <div class="form-actions">
-      <button class="btn btn-primary" (click)="upload()" [disabled]="!selectedFile || isUploading">
-        @if (isUploading) { Subiendo... } @else { SUBIR PLANTILLA }
+      <button type="button" class="btn btn-primary" (click)="upload()" [disabled]="!selectedFile || isUploading">
+        @if (isUploading) {
+          Subiendo...
+        } @else {
+          <span class="cl cl-add-circle-line" aria-hidden="true"></span>
+          Subir plantilla
+        }
       </button>
     </div>
-  </div>
+  </section>
 
-  <!-- Listado de plantillas registradas -->
-  <div class="table-wrapper">
-    <h3 class="card-title">PLANTILLAS REGISTRADAS</h3>
+  <section class="table-wrapper" aria-labelledby="templates-title">
+    <div class="table-header">
+      <h2 id="templates-title">Plantillas registradas</h2>
+    </div>
 
     @if (isLoading) {
       <div class="table-loading">
@@ -88,7 +98,7 @@
             <th>Período</th>
             <th>Archivo</th>
             <th>Tamaño</th>
-            <th>Fecha Subida</th>
+            <th>Fecha subida</th>
             <th>Acción</th>
           </tr>
         </thead>
@@ -102,15 +112,21 @@
               <td class="filename">{{ p.nombreArchivo }}</td>
               <td>{{ formatBytes(p.tamanoBytes) }}</td>
               <td>{{ p.fechaSubida | date:'dd/MM/yyyy HH:mm' }}</td>
-              <td><button class="btn btn-outline-secondary" (click)="descargar(p)">Descargar</button></td>
+              <td>
+                <button type="button" class="btn btn-outline-secondary" (click)="descargar(p)">
+                  <span class="cl cl-download" aria-hidden="true"></span>
+                  Descargar
+                </button>
+              </td>
             </tr>
           }
           @empty {
-            <tr><td colspan="6" class="empty-table">No hay plantillas registradas aún</td></tr>
+            <tr>
+              <td colspan="6" class="empty-table">No hay plantillas registradas aún.</td>
+            </tr>
           }
         </tbody>
       </table>
     }
-  </div>
-
-</div>
+  </section>
+</section>

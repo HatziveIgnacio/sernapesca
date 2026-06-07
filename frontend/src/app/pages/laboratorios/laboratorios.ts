@@ -122,7 +122,6 @@ export class Laboratorios {
 
     this.svc.uploadFile(this.selectedFile, this.templateType).subscribe({
       next: (result) => {
-        console.log('[Lab Frontend] Respuesta recibida:', result.totalRows, 'filas,', result.errorRows, 'errores');
         this.validationResult = result;
         this.currentPage = 1;
         this.isLoading = false;
@@ -130,7 +129,6 @@ export class Laboratorios {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('[Lab Frontend] Error HTTP:', err);
         this.isLoading = false;
         this.currentStep = 1;
         const msg = err?.error?.message ?? 'Error al procesar el archivo';
