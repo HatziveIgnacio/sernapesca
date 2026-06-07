@@ -4,6 +4,7 @@ import { MainLayout } from './layout/main-layout/main-layout';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Laboratorios } from './pages/laboratorios/laboratorios';
 import { Plantillas } from './pages/plantillas/plantillas';
+import { Periodos } from './pages/periodos/periodos';
 import { Placeholder } from './pages/placeholder/placeholder';
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: Dashboard },
       { path: 'laboratorios', component: Laboratorios },
       { path: 'plantillas', component: Plantillas },
+      { path: 'periodos', component: Periodos },
       {
         path: 'registros',
         component: Placeholder,

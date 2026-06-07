@@ -217,6 +217,18 @@
   text-decoration: underline;
 }
 
+.btn-primary svg { width: 18px; height: 18px; }
+
+.error-alert {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #b91c1c;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+}
+
+
 .info-box {
   display: flex;
   gap: 0.75rem;

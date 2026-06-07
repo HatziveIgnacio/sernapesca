@@ -1,6 +1,9 @@
 # Maven build output
 target/
 
+# Maven wrapper distribution (descargado automáticamente por mvnw.cmd)
+.mvn/wrapper/apache-maven-*/
+
 # Archivos subidos (plantillas, consolidados) — solo datos locales
 storage/
 

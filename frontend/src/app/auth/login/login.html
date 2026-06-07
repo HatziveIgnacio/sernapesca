@@ -45,37 +45,39 @@
         <p>Ingrese sus credenciales corporativas para continuar.</p>
       </div>
 
-      <form class="login-form">
+      <form class="login-form" (ngSubmit)="onSubmit()">
         <div class="form-group">
-          <label for="login-email">Correo electrónico</label>
+          <label for="login-rut">RUT</label>
           <div class="input-wrapper">
-            <span class="cl cl-login input-icon" aria-hidden="true"></span>
-            <input id="login-email" class="form-control" type="email" placeholder="nombre@sernapesca.cl" autocomplete="email" />
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input
+              id="login-rut"
+              class="form-control"
+              type="text"
+              placeholder="12345678-9"
+              aria-label="RUT"
+              [(ngModel)]="rut"
+              name="rut"
+              autocomplete="username"
+            />
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="login-password">Contraseña</label>
-          <div class="input-wrapper">
-            <span class="cl cl-claveunica input-icon" aria-hidden="true"></span>
-            <input id="login-password" class="form-control" type="password" placeholder="Ingrese su contraseña" autocomplete="current-password" />
-            <button type="button" class="icon-button" aria-label="Mostrar contraseña">
-              <span class="cl cl-img-preview" aria-hidden="true"></span>
-            </button>
-          </div>
-        </div>
+        @if (errorMessage) {
+          <div class="error-alert">{{ errorMessage }}</div>
+        }
 
-        <div class="form-actions">
-          <div class="custom-control custom-checkbox">
-            <input id="remember-me" type="checkbox" class="custom-control-input" />
-            <label class="custom-control-label" for="remember-me">Recordarme</label>
-          </div>
-          <button type="button" class="link-button">¿Olvidaste tu contraseña?</button>
-        </div>
-
-        <button type="button" class="btn btn-primary btn-block" routerLink="/dashboard" aria-label="Iniciar sesión">
-          Iniciar Sesión
-          <span class="cl cl-arrow-right" aria-hidden="true"></span>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading" aria-label="Iniciar sesión">
+          @if (isLoading) { Iniciando sesión... } @else {
+            Iniciar Sesión
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          }
         </button>
 
         <div class="info-box">
