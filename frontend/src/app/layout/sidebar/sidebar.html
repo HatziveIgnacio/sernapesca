@@ -1,52 +1,45 @@
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Navegación secundaria">
   <div class="sidebar-header">
+    <p class="sidebar-kicker">SERNAPESCA</p>
     <h2>Sistema Central</h2>
-    <p>PLATAFORMA DE GESTIÓN</p>
+    <span class="line line-primary" aria-hidden="true"></span>
   </div>
-  
+
   <nav class="sidebar-nav">
-    <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
-      </svg> Dashboard
+    <a routerLink="/dashboard" routerLinkActive="active" #dashboardLink="routerLinkActive" [attr.aria-current]="dashboardLink.isActive ? 'page' : null" class="nav-item">
+      <span class="cl cl-list" aria-hidden="true"></span>
+      <span>Dashboard</span>
     </a>
-    <a routerLink="/registros" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline>
-      </svg> Registros
+    <a routerLink="/registros" routerLinkActive="active" #registrosLink="routerLinkActive" [attr.aria-current]="registrosLink.isActive ? 'page' : null" class="nav-item">
+      <span class="cl cl-document-verified" aria-hidden="true"></span>
+      <span>Registros</span>
     </a>
-    <a routerLink="/validacion" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
-      </svg> Validación
+    <a routerLink="/validacion" routerLinkActive="active" #validacionLink="routerLinkActive" [attr.aria-current]="validacionLink.isActive ? 'page' : null" class="nav-item">
+      <span class="cl cl-ok" aria-hidden="true"></span>
+      <span>Validación</span>
     </a>
-    <a routerLink="/reportes" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>
-      </svg> Reportes
+    <a routerLink="/reportes" routerLinkActive="active" #reportesLink="routerLinkActive" [attr.aria-current]="reportesLink.isActive ? 'page' : null" class="nav-item">
+      <span class="cl cl-computer" aria-hidden="true"></span>
+      <span>Reportes</span>
     </a>
-    <a routerLink="/laboratorios" routerLinkActive="active" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path><path d="M5.52 16h12.96"></path>
-      </svg> Laboratorios
+    <a routerLink="/laboratorios" routerLinkActive="active" #labsLink="routerLinkActive" [attr.aria-current]="labsLink.isActive ? 'page' : null" class="nav-item">
+      <span class="cl cl-briefcase" aria-hidden="true"></span>
+      <span>Laboratorios</span>
     </a>
-    <a routerLink="/plantillas" routerLinkActive="active" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line>
-      </svg> Plantillas
+    <a routerLink="/plantillas" routerLinkActive="active" #plantillasLink="routerLinkActive" [attr.aria-current]="plantillasLink.isActive ? 'page' : null" class="nav-item">
+      <span class="cl cl-download" aria-hidden="true"></span>
+      <span>Plantillas</span>
     </a>
   </nav>
 
   <div class="sidebar-footer">
-    <a routerLink="/soporte" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line>
-      </svg> Soporte
+    <a routerLink="/soporte" routerLinkActive="active" #soporteLink="routerLinkActive" [attr.aria-current]="soporteLink.isActive ? 'page' : null" class="nav-item">
+      <span class="cl cl-question" aria-hidden="true"></span>
+      <span>Soporte</span>
     </a>
     <a routerLink="/login" class="nav-item logout">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line>
-      </svg> Cerrar Sesión
+      <span class="cl cl-logout" aria-hidden="true"></span>
+      <span>Cerrar Sesión</span>
     </a>
   </div>
 </aside>

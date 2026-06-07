@@ -1,9 +1,5 @@
-<div class="login-layout">
-  <!-- Panel Izquierdo -->
-  <div class="left-panel">
-    <!-- Patrón de fondo opcional -->
-    <div class="bg-pattern"></div>
-    
+<main class="login-layout">
+  <section class="left-panel" aria-labelledby="login-brand-title">
     <div class="left-content">
       <div class="gov-brand" aria-label="Gobierno de Chile">
         <span class="brand-bar blue"></span>
@@ -11,78 +7,60 @@
       </div>
 
       <div class="brand">
-        <div class="logo-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="anchor-icon">
-            <circle cx="12" cy="5" r="3"></circle>
-            <line x1="12" y1="22" x2="12" y2="8"></line>
-            <path d="M5 12H2a10 10 0 0 0 20 0h-3"></path>
-          </svg>
+        <div class="logo-box" aria-hidden="true">
+          <span class="cl cl-authority"></span>
         </div>
         <div class="brand-text">
-          <h1>Sernapesca Hub</h1>
-          <p>Plataforma de Gestión</p>
+          <p>SERNAPESCA</p>
+          <h1 id="login-brand-title">Sernapesca Hub</h1>
         </div>
       </div>
-      
+
       <p class="description">
-        Gestión eficiente y transparente de recursos marítimos para un futuro sostenible en el sector pesquero nacional.
+        Plataforma institucional para la gestión de reportes, validación y trazabilidad de laboratorios.
       </p>
 
-      <div class="badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        <span>Sistema Centralizado de Validación</span>
+      <div class="badge badge-primary">
+        <span class="cl cl-document-verified" aria-hidden="true"></span>
+        Sistema Centralizado de Validación
       </div>
 
-      <div class="image-container">
-        <div class="institutional-card">
-          <strong>Servicio Nacional de Pesca y Acuicultura</strong>
-          <span>Gestión de reportes, validación y trazabilidad para laboratorios.</span>
-        </div>
+      <div class="institutional-card">
+        <strong>Servicio Nacional de Pesca y Acuicultura</strong>
+        <span>Ministerio de Economía, Fomento y Turismo</span>
       </div>
     </div>
-    
-    <div class="footer-left">
-      <span>© 2024 SERNAPESCA</span>
-      <span>GOBIERNO DE CHILE</span>
-    </div>
-  </div>
 
-  <!-- Panel Derecho -->
-  <div class="right-panel">
+    <footer class="footer-left">
+      <span>SERNAPESCA</span>
+      <span>Gobierno de Chile</span>
+    </footer>
+  </section>
+
+  <section class="right-panel" aria-labelledby="login-title">
     <div class="login-form-container card">
       <div class="login-header">
-        <h2>Acceso al Sistema</h2>
+        <p class="login-kicker">Acceso institucional</p>
+        <h2 id="login-title" class="line line-primary">Acceso al Sistema</h2>
         <p>Ingrese sus credenciales corporativas para continuar.</p>
       </div>
 
       <form class="login-form">
         <div class="form-group">
-          <label for="login-email">Correo Electrónico</label>
+          <label for="login-email">Correo electrónico</label>
           <div class="input-wrapper">
-            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-              <polyline points="22,6 12,13 2,6"></polyline>
-            </svg>
-            <input id="login-email" class="form-control" type="email" placeholder="nombre@ejemplo.cl" aria-label="Correo electrónico" />
+            <span class="cl cl-login input-icon" aria-hidden="true"></span>
+            <input id="login-email" class="form-control" type="email" placeholder="nombre@sernapesca.cl" autocomplete="email" />
           </div>
         </div>
 
         <div class="form-group">
           <label for="login-password">Contraseña</label>
           <div class="input-wrapper">
-            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <input id="login-password" class="form-control" type="password" placeholder="••••••••" aria-label="Contraseña" />
+            <span class="cl cl-claveunica input-icon" aria-hidden="true"></span>
+            <input id="login-password" class="form-control" type="password" placeholder="Ingrese su contraseña" autocomplete="current-password" />
             <button type="button" class="icon-button" aria-label="Mostrar contraseña">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
+              <span class="cl cl-img-preview" aria-hidden="true"></span>
             </button>
           </div>
         </div>
@@ -92,32 +70,25 @@
             <input id="remember-me" type="checkbox" class="custom-control-input" />
             <label class="custom-control-label" for="remember-me">Recordarme</label>
           </div>
-          <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+          <button type="button" class="link-button">¿Olvidaste tu contraseña?</button>
         </div>
 
-        <button type="button" class="btn btn-primary" routerLink="/dashboard" aria-label="Iniciar sesión">
+        <button type="button" class="btn btn-primary btn-block" routerLink="/dashboard" aria-label="Iniciar sesión">
           Iniciar Sesión
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
+          <span class="cl cl-arrow-right" aria-hidden="true"></span>
         </button>
 
         <div class="info-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="16" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-          </svg>
-          <p>Si presenta dificultades técnicas para acceder, por favor contacte a la Mesa de Ayuda institucional.</p>
+          <span class="cl cl-call-info" aria-hidden="true"></span>
+          <p>Si presenta dificultades técnicas para acceder, contacte a la Mesa de Ayuda institucional.</p>
         </div>
       </form>
 
-      <div class="footer-right">
-        <a href="#">Manual de Usuario</a>
-        <a href="#">Términos de Uso</a>
-        <a href="#">Privacidad</a>
-      </div>
+      <footer class="footer-right">
+        <button type="button" class="link-button">Manual de Usuario</button>
+        <button type="button" class="link-button">Términos de Uso</button>
+        <button type="button" class="link-button">Privacidad</button>
+      </footer>
     </div>
-  </div>
-</div>
+  </section>
+</main>
