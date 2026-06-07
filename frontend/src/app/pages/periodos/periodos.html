@@ -1,0 +1,123 @@
+<div class="periodos-container">
+
+  <div class="periodos-header">
+    <h1>Gestión de Períodos de Reporte</h1>
+    <p>Cree los períodos mensuales y ciérrelos para bloquear nuevos envíos y gatillar el consolidado.</p>
+  </div>
+
+  <!-- Crear período -->
+  <div class="upload-card">
+    <h3 class="card-title">CREAR NUEVO PERÍODO</h3>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="tipo-periodo">Tipo</label>
+        <select id="tipo-periodo" [(ngModel)]="tipo" (ngModelChange)="onTipoChange()" class="select-template" aria-label="Tipo de período">
+          <option value="RRA">RRA</option>
+          <option value="RRA_FAR">RRA FAR</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="anio-input">Año</label>
+        <input
+          id="anio-input"
+          type="number"
+          [ngModel]="anio"
+          (ngModelChange)="onAnioChange($event)"
+          min="2020"
+          [max]="anioActual"
+          class="input-field"
+          aria-label="Año"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="mes-select">Mes</label>
+        <select id="mes-select" [(ngModel)]="mes" class="select-template" aria-label="Mes">
+          @for (m of mesesPermitidos; track m) {
+            <option [value]="m">{{ meses[m - 1] }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="plantilla-select">Plantilla vinculada (opcional)</label>
+        <select id="plantilla-select" [(ngModel)]="plantillaId" class="select-template" aria-label="Plantilla">
+          <option [ngValue]="''">— Sin vincular —</option>
+          @for (p of plantillasFiltradas; track p.id) {
+            <option [ngValue]="p.id">{{ p.tipo }} {{ meses[p.mes - 1] }} {{ p.anio }} — {{ p.nombreArchivo }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    @if (errorMessage) {
+      <div class="error-banner">⚠ {{ errorMessage }}</div>
+    }
+    @if (successMessage) {
+      <div class="success-banner">✓ {{ successMessage }}</div>
+    }
+
+    <div class="form-actions">
+      <button class="btn-primary" (click)="crear()" [disabled]="isCreating">
+        @if (isCreating) { Creando... } @else { CREAR PERÍODO }
+      </button>
+    </div>
+  </div>
+
+  <!-- Listado de períodos -->
+  <div class="table-wrapper">
+    <h3 class="card-title">PERÍODOS REGISTRADOS</h3>
+
+    @if (isLoading) {
+      <div class="table-loading">
+        <div class="spinner"></div>
+        <p>Cargando períodos...</p>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Período</th>
+            <th>Plantilla</th>
+            <th>Estado</th>
+            <th>Creado</th>
+            <th>Cerrado</th>
+            <th>Consolidado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of periodos; track p.id) {
+            <tr>
+              <td>
+                <span [ngClass]="p.tipo === 'RRA' ? 'badge-rra' : 'badge-far'">{{ p.tipo }}</span>
+              </td>
+              <td>{{ nombreMes(p.mes) }} {{ p.anio }}</td>
+              <td class="filename">{{ plantillaLabel(p.plantillaId) }}</td>
+              <td>
+                <span [ngClass]="p.estado === 'ABIERTO' ? 'badge-abierto' : 'badge-cerrado'">{{ p.estado }}</span>
+              </td>
+              <td>{{ p.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ p.fechaCierre ? (p.fechaCierre | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+              <td>{{ p.consolidadoSolicitado ? '✓ Solicitado' : '—' }}</td>
+              <td>
+                @if (p.estado === 'ABIERTO') {
+                  <button class="btn-danger" (click)="cerrar(p)">Cerrar</button>
+                } @else {
+                  <span class="text-muted">Cerrado</span>
+                }
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr><td colspan="8" class="empty-table">No hay períodos registrados aún</td></tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+</div>
