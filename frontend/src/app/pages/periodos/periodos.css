@@ -169,6 +169,26 @@
 }
 .btn-danger:hover { background: #b91c1c; }
 
+.acciones {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-outline {
+  height: 32px;
+  padding: 0 0.875rem;
+  font-size: 0.75rem;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: #334155;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-outline:hover:not(:disabled) { border-color: #2563eb; color: #2563eb; }
+.btn-outline:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* ── Spinner ─────────────────────────────────────────────────────────────── */
 .table-loading {
   display: flex;

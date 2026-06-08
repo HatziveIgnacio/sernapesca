@@ -50,4 +50,15 @@ export class PeriodosService {
   vincularPlantilla(id: number, plantillaId: string): Observable<PeriodoDto> {
     return this.http.put<PeriodoDto>(`${this.api}/${id}/plantilla`, { plantillaId });
   }
+
+  /**
+   * Descarga el consolidado del período: un Excel con todos los reportes
+   * validados apilados. Devuelve el blob (404 si no hay reportes).
+   */
+  descargarConsolidado(tipo: TipoPeriodo, anio: number, mes: number): Observable<Blob> {
+    return this.http.get(
+      `${environment.javaApi}/consolidados/${tipo}/download?anio=${anio}&mes=${mes}`,
+      { responseType: 'blob' }
+    );
+  }
 }

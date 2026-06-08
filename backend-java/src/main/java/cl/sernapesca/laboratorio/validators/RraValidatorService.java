@@ -43,7 +43,9 @@ public class RraValidatorService {
         Object valor = row.get(field);
         if (isEmpty(valor)) return; // la obligatoriedad se valida aparte
         if (reglas.tieneCatalogo(field) && !reglas.permite(field, valor)) {
-            errors.add(err(col, field, "Valor no permitido según la plantilla del período"));
+            String v = valor.toString().trim();
+            if (v.length() > 60) v = v.substring(0, 60) + "…";
+            errors.add(err(col, field, "El valor '" + v + "' no está en la lista de la plantilla del período"));
         }
     }
 

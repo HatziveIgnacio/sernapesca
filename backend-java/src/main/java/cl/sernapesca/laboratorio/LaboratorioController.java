@@ -71,9 +71,13 @@ public class LaboratorioController {
                     "El archivo no contiene registros para validar. Verifique que haya cargado datos en la hoja 'ingreso'."));
             }
             return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            // Tipo de plantilla incorrecto u otra validación de entrada → 400 con mensaje legible
+            return ResponseEntity.badRequest().body(java.util.Map.of("message", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error procesando el archivo. Verifique que sea un .xlsx válido. Detalle: " + e.getMessage());
+                    .body(java.util.Map.of("message",
+                        "Error procesando el archivo. Verifique que sea un .xlsx válido. Detalle: " + e.getMessage()));
         }
     }
 

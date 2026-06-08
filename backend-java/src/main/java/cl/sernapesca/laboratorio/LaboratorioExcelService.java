@@ -62,7 +62,7 @@ public class LaboratorioExcelService {
         return ReglasDinamicas.desde(valores);
     }
 
-    private static final List<String> RRA_COLUMNS = Arrays.asList(
+    public static final List<String> RRA_COLUMNS = Arrays.asList(
         "nombre_laboratorio", "tipo_laboratorio", "n_informe", "tipo_formulario", "n_formulario",
         "tipo_control", "id_siscomex", "codigo_establecimiento", "razon_social", "codigo_area_extraccion",
         "fecha_extraccion", "tipo_consumo", "codigo_producto", "nombre_comun", "linea_proceso",
@@ -72,7 +72,7 @@ public class LaboratorioExcelService {
         "fecha_emision_informe", "externalizacion", "nombre_lab_externalizacion", "anula_reemplaza"
     );
 
-    private static final List<String> RRA_FAR_COLUMNS = Arrays.asList(
+    public static final List<String> RRA_FAR_COLUMNS = Arrays.asList(
         "nombre_laboratorio", "tipo_laboratorio", "n_informe", "tipo_formulario", "n_formulario",
         "tipo_control", "id_siscomex", "codigo_establecimiento", "razon_social", "codigo_centro_cultivo",
         "nombre_centro_cultivo", "jaula", "tipo_consumo", "codigo_producto", "nombre_comun",
@@ -102,6 +102,16 @@ public class LaboratorioExcelService {
         try (InputStream is = file.getInputStream(); Workbook workbook = WorkbookFactory.create(is)) {
             // SheetNames[1] = ingreso, SheetNames[0] = Versión
             Sheet sheet = workbook.getNumberOfSheets() > 1 ? workbook.getSheetAt(1) : workbook.getSheetAt(0);
+
+            // Detecta el tipo real del archivo y verifica que coincida con el seleccionado
+            String tipoReal = detectarTipo(sheet);
+            if (tipoReal != null && !tipoReal.equals(templateType)) {
+                String legible = tipoReal.equals("RRA_FAR") ? "RRA FAR" : "RRA";
+                String seleccionado = "RRA_FAR".equals(templateType) ? "RRA FAR" : "RRA";
+                throw new IllegalArgumentException(
+                    "El archivo corresponde a una plantilla " + legible + ", pero seleccionó " + seleccionado +
+                    ". Seleccione el tipo de plantilla correcto.");
+            }
 
             int dataStartRow = 1; // Saltamos la cabecera
             for (int i = dataStartRow; i <= sheet.getLastRowNum(); i++) {
@@ -138,6 +148,25 @@ public class LaboratorioExcelService {
             results.size() - validRows,
             results
         );
+    }
+
+    /**
+     * Detecta el tipo de plantilla por el encabezado de la columna J: en RRA es
+     * "Código área extracción", en RRA FAR es "Código Centro de Cultivo".
+     * Devuelve "RRA", "RRA_FAR" o null si no puede determinarlo.
+     */
+    private String detectarTipo(Sheet sheet) {
+        Row header = sheet.getRow(0);
+        if (header == null) return null;
+        Cell celdaJ = header.getCell(9); // columna J (0-based índice 9)
+        Object val = getCellValue(celdaJ);
+        if (val == null) return null;
+        String j = java.text.Normalizer.normalize(val.toString(), java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .toLowerCase().trim();
+        if (j.contains("centro de cultivo")) return "RRA_FAR";
+        if (j.contains("area extraccion") || j.contains("area de extraccion")) return "RRA";
+        return null;
     }
 
     private boolean hasAnyData(Row row) {
