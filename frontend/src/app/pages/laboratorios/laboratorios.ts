@@ -22,6 +22,8 @@ export class Laboratorios {
   validationResult: ValidationResult | null = null;
   errorMessage: string | null = null;
   selectedErrorRow: RowResult | null = null;
+  isFinalizing = false;
+  finalizadoMsg: string | null = null;
 
   private searchTerm = '';
   currentPage = 1;
@@ -146,6 +148,31 @@ export class Laboratorios {
     this.searchTerm = '';
     this.currentPage = 1;
     this.selectedErrorRow = null;
+    this.isFinalizing = false;
+    this.finalizadoMsg = null;
+  }
+
+  finalizar() {
+    if (!this.selectedFile || !this.validationResult) return;
+    if (this.validationResult.errorRows > 0) return;
+
+    this.isFinalizing = true;
+    this.errorMessage = null;
+    this.finalizadoMsg = null;
+
+    this.svc.finalizar(this.selectedFile, this.templateType).subscribe({
+      next: (r) => {
+        this.isFinalizing = false;
+        this.finalizadoMsg = r.mensaje;
+        this.currentStep = 4;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isFinalizing = false;
+        this.errorMessage = err?.error?.message ?? 'Error al subir el reporte';
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   isDownloadingTemplate = false;

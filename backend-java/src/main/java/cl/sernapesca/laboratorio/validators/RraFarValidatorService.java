@@ -12,16 +12,57 @@ import java.util.*;
 public class RraFarValidatorService {
 
     private static final DateTimeFormatter CL_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final Set<String> VERIFICACION_TYPES = Set.of("Verificación Sernapesca", "Verificación periódica PAC");
+    private static final Set<String> VERIFICACION_TYPES = Set.of("verificación sernapesca", "verificación periódica pac");
     private static final Set<String> CENTRO_CULTIVO_CONTROLS = Set.of("Control Mensual", "Control de Sustancias Prohibidas y No autorizadas", "Control Precosecha");
     private static final Set<String> FEMPAC_SMAE = Set.of("FEMPAC", "SMAE");
+
+    // NOTA: regla "fecha muestreo > inicio quincena" pendiente. Ver RraValidatorService:
+    // los datos reales de RRA muestran muestreos repartidos por todo el mes, así que no
+    // se valida como día fijo. PENDIENTE: confirmar definición con SERNAPESCA.
 
     private boolean isEmpty(Object v) {
         return v == null || v.toString().trim().isEmpty();
     }
 
+    /** ¿El tipo de control es de verificación? Comparación case-insensitive. */
+    private boolean esVerificacion(String tipoControl) {
+        return tipoControl != null && VERIFICACION_TYPES.contains(tipoControl.trim().toLowerCase());
+    }
+
     private FieldError err(String col, String field, String msg) {
         return new FieldError(col, field, msg);
+    }
+
+    /**
+     * Valida un campo contra el catálogo dinámico del período. Solo marca error
+     * si el campo tiene catálogo cargado, el valor no está vacío y no pertenece
+     * al catálogo. Campos sin catálogo (período sin plantilla) no se bloquean.
+     */
+    private void validarCatalogo(Map<String, Object> row, String field, String col,
+                                 ReglasDinamicas reglas, List<FieldError> errors) {
+        Object valor = row.get(field);
+        if (isEmpty(valor)) return;
+        if (reglas.tieneCatalogo(field) && !reglas.permite(field, valor)) {
+            errors.add(err(col, field, "Valor no permitido según la plantilla del período"));
+        }
+    }
+
+    /**
+     * Valida una fecha obligatoria de la cadena cronológica: obligatoriedad,
+     * formato, rango de 4 años y que sea mayor o igual a la fecha previa.
+     */
+    private LocalDate validarFechaCadena(Map<String, Object> row, String field, String col,
+                                         LocalDate previa, String nombrePrevia,
+                                         LocalDate min, LocalDate max, List<FieldError> errors) {
+        if (isEmpty(row.get(field))) {
+            errors.add(err(col, field, "Campo obligatorio"));
+            return null;
+        }
+        LocalDate d = validateDateRange(row.get(field), col, field, min, max, errors);
+        if (d != null && previa != null && d.isBefore(previa)) {
+            errors.add(err(col, field, "Debe ser mayor o igual a la " + nombrePrevia));
+        }
+        return d;
     }
 
     private LocalDate validateDateRange(Object value, String col, String field, LocalDate min, LocalDate max, List<FieldError> errors) {
@@ -35,7 +76,7 @@ public class RraFarValidatorService {
         return d;
     }
 
-    public ValidatedRow validate(Map<String, Object> row, int rowNumber) {
+    public ValidatedRow validate(Map<String, Object> row, int rowNumber, ReglasDinamicas reglas) {
         List<FieldError> errors = new ArrayList<>();
         LocalDate now = DateUtils.today();
         LocalDate minDate = DateUtils.addYears(now, -4);
@@ -44,19 +85,34 @@ public class RraFarValidatorService {
 
         // A, B, C, E — Obligatorios
         Map<String, String> requiredFields = Map.of(
-            "nombre_laboratorio", "A", "tipo_laboratorio", "B", 
+            "nombre_laboratorio", "A", "tipo_laboratorio", "B",
             "n_informe", "C", "n_formulario", "E"
         );
         for (Map.Entry<String, String> entry : requiredFields.entrySet()) {
             if (isEmpty(row.get(entry.getKey()))) errors.add(err(entry.getValue(), entry.getKey(), "Campo obligatorio"));
         }
 
-        // D: tipo_formulario
+        // Catálogos dinámicos (columnas propias de RRA FAR)
+        validarCatalogo(row, "nombre_laboratorio", "A", reglas, errors);
+        validarCatalogo(row, "tipo_laboratorio", "B", reglas, errors);
+        validarCatalogo(row, "tipo_formulario", "D", reglas, errors);
+        validarCatalogo(row, "tipo_control", "F", reglas, errors);
+        validarCatalogo(row, "id_siscomex", "G", reglas, errors);
+        validarCatalogo(row, "codigo_establecimiento", "H", reglas, errors);
+        validarCatalogo(row, "codigo_producto", "N", reglas, errors);
+        validarCatalogo(row, "nombre_entidad_muestreo", "T", reglas, errors);
+        validarCatalogo(row, "tipo_analisis", "Y", reglas, errors);
+        validarCatalogo(row, "analisis_solicitado", "Z", reglas, errors);
+        validarCatalogo(row, "unidad_medida", "AB", reglas, errors);
+
+        // D: tipo_formulario — obligatorio siempre en RRA FAR
         String tipoFormulario = isEmpty(row.get("tipo_formulario")) ? "" : row.get("tipo_formulario").toString().trim();
+        if (tipoFormulario.isEmpty()) errors.add(err("D", "tipo_formulario", "Campo obligatorio"));
         boolean isFempacSmae = FEMPAC_SMAE.contains(tipoFormulario);
 
-        // F: tipo_control
+        // F: tipo_control — obligatorio siempre en RRA FAR
         String tipoControl = isEmpty(row.get("tipo_control")) ? "" : row.get("tipo_control").toString().trim();
+        if (tipoControl.isEmpty()) errors.add(err("F", "tipo_control", "Campo obligatorio"));
 
         // G: ID SISCOMEX
         if ("FEMPAC".equals(tipoFormulario) && isEmpty(row.get("id_siscomex"))) {
@@ -97,7 +153,7 @@ public class RraFarValidatorService {
 
         // R: Fecha inicio verificación
         LocalDate fechaInicioVer = null;
-        if (VERIFICACION_TYPES.contains(tipoControl)) {
+        if (esVerificacion(tipoControl)) {
             if (isEmpty(row.get("fecha_inicio_verificacion"))) {
                 errors.add(err("R", "fecha_inicio_verificacion", "Obligatorio para Verificación Sernapesca/Periódica"));
             } else {
@@ -110,7 +166,7 @@ public class RraFarValidatorService {
 
         // S: Fecha fin verificación
         LocalDate fechaFinVer = null;
-        if (VERIFICACION_TYPES.contains(tipoControl)) {
+        if (esVerificacion(tipoControl)) {
             if (isEmpty(row.get("fecha_fin_verificacion"))) {
                 errors.add(err("S", "fecha_fin_verificacion", "Obligatorio para Verificación Sernapesca/Periódica"));
             } else {
@@ -162,26 +218,19 @@ public class RraFarValidatorService {
             }
         }
 
-        // Campos finales simples obligatorios
-        Map<String, String> simpleRequiredFields = Map.of(
-            "codigo_muestra", "X", "tipo_analisis", "Y", "analisis_solicitado", "Z"
+        // Campos finales no-fecha obligatorios (los catálogos ya se validaron arriba)
+        Map<String, String> obligNoFecha = Map.of(
+            "codigo_muestra", "X", "tipo_analisis", "Y", "analisis_solicitado", "Z",
+            "valor_obtenido", "AA", "unidad_medida", "AB"
         );
-        for (Map.Entry<String, String> entry : simpleRequiredFields.entrySet()) {
+        for (Map.Entry<String, String> entry : obligNoFecha.entrySet()) {
             if (isEmpty(row.get(entry.getKey()))) errors.add(err(entry.getValue(), entry.getKey(), "Campo obligatorio"));
         }
 
-        // AC, AD, AE: Fechas de análisis cruzadas finales usando Map.ofEntries
-        Map<String, String> endFields = Map.ofEntries(
-            Map.entry("valor_obtenido", "AA"),
-            Map.entry("unidad_medida", "AB"),
-            Map.entry("fecha_inicio_analisis", "AC"),
-            Map.entry("fecha_obtencion_resultados", "AD"),
-            Map.entry("fecha_emision_informe", "AE")
-        );
-
-        for (Map.Entry<String, String> entry : endFields.entrySet()) {
-            if (isEmpty(row.get(entry.getKey()))) errors.add(err(entry.getValue(), entry.getKey(), "Campo obligatorio"));
-        }
+        // Cadena cronológica final: inicio análisis ≥ recepción ≥ ... ≥ emisión (rango 4 años)
+        LocalDate fechaInicioAnalisis = validarFechaCadena(row, "fecha_inicio_analisis", "AC", fechaRecepcion, "fecha de recepción de muestras", minDate, maxDate, errors);
+        LocalDate fechaObtencion = validarFechaCadena(row, "fecha_obtencion_resultados", "AD", fechaInicioAnalisis, "fecha de inicio de análisis", minDate, maxDate, errors);
+        validarFechaCadena(row, "fecha_emision_informe", "AE", fechaObtencion, "fecha de obtención de resultados", minDate, maxDate, errors);
 
         if (!isEmpty(row.get("externalizacion")) && isEmpty(row.get("nombre_lab_externalizacion"))) {
             errors.add(err("AG", "nombre_lab_externalizacion", "Obligatorio cuando se indica externalización"));

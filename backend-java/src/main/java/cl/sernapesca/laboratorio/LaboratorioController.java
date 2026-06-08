@@ -52,18 +52,24 @@ public class LaboratorioController {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("templateType") String templateType) {
-        
+            @RequestParam("templateType") String templateType,
+            @RequestParam(value = "anio", required = false) Integer anio,
+            @RequestParam(value = "mes", required = false) Integer mes) {
+
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("No se recibió ningún archivo");
         }
-        
+
         if (!"RRA".equals(templateType) && !"RRA_FAR".equals(templateType)) {
             return ResponseEntity.badRequest().body("Tipo de plantilla inválido. Use RRA o RRA_FAR");
         }
 
         try {
-            ValidationResult result = excelService.validateFile(file, templateType);
+            ValidationResult result = excelService.validateFile(file, templateType, anio, mes);
+            if (result.totalRows() == 0) {
+                return ResponseEntity.badRequest().body(java.util.Map.of("message",
+                    "El archivo no contiene registros para validar. Verifique que haya cargado datos en la hoja 'ingreso'."));
+            }
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

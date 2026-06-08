@@ -81,6 +81,13 @@
         </div>
       }
 
+      @if (finalizadoMsg) {
+        <div class="success-banner" role="status">
+          <span class="cl cl-check" aria-hidden="true"></span>
+          <span>{{ finalizadoMsg }}</span>
+        </div>
+      }
+
       <section class="session-card">
         <h2 class="card-title">Resumen de sesión</h2>
         <div class="session-stats">
@@ -225,9 +232,11 @@
       <button type="button" class="btn btn-outline-secondary" (click)="resetUpload()">Cancelar carga</button>
       <button type="button" class="btn btn-primary" (click)="validate()">Validar archivo</button>
     } @else if (validationResult) {
-      <button type="button" class="btn btn-outline-secondary" (click)="resetUpload()">Nueva carga</button>
+      <button type="button" class="btn btn-outline-secondary" (click)="resetUpload()" [disabled]="isFinalizing">Nueva carga</button>
       @if (validationResult.errorRows === 0) {
-        <button type="button" class="btn btn-primary">Finalizar y subir datos</button>
+        <button type="button" class="btn btn-primary" (click)="finalizar()" [disabled]="isFinalizing">
+          {{ isFinalizing ? 'Subiendo...' : 'Finalizar y subir datos' }}
+        </button>
       }
     } @else {
       <button type="button" class="btn btn-primary" disabled>Finalizar y subir datos</button>
