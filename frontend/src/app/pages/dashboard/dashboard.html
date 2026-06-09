@@ -1,132 +1,151 @@
 <section class="app-section dashboard-page">
+
   <div class="section-heading">
     <div>
       <h1 class="line line-primary">Resumen Operativo</h1>
-      <p>Control y seguimiento de muestras biológicas y registros de laboratorio.</p>
+      <p>Estado general del sistema de reportes sanitarios de laboratorios.</p>
     </div>
-    <button type="button" class="btn btn-primary">
+    <a routerLink="/laboratorios" class="btn btn-primary">
       <span class="cl cl-add-circle-line" aria-hidden="true"></span>
-      Cargar nuevo registro
-    </button>
+      Cargar nuevo reporte
+    </a>
   </div>
 
-  <div class="kpi-grid">
-    <article class="kpi-card">
-      <div class="kpi-top">
-        <div class="kpi-icon blue-bg" aria-hidden="true">
-          <span class="cl cl-document-verified"></span>
-        </div>
-        <span class="badge badge-success">+12% vs mes anterior</span>
-      </div>
-      <div class="kpi-content">
-        <p>Total envíos</p>
-        <h2>1.284</h2>
-      </div>
-    </article>
+  <!-- Error de conexión -->
+  @if (errorMessage) {
+    <div class="alert-banner">
+      <span class="cl cl-call-info" aria-hidden="true"></span>
+      {{ errorMessage }}
+    </div>
+  }
 
-    <article class="kpi-card">
-      <div class="kpi-top">
-        <div class="kpi-icon teal-bg" aria-hidden="true">
-          <span class="cl cl-currency-cycle"></span>
-        </div>
-      </div>
-      <div class="kpi-content">
-        <p>En proceso</p>
-        <h2>42</h2>
-        <div class="progress" aria-label="60 por ciento en proceso">
-          <div class="progress-bar" style="width: 60%"></div>
-        </div>
-      </div>
-    </article>
+  <!-- KPIs -->
+  @if (isLoading) {
+    <div class="kpi-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <article class="kpi-card skeleton-card">
+          <div class="skeleton-icon"></div>
+          <div class="skeleton-text"></div>
+          <div class="skeleton-num"></div>
+        </article>
+      }
+    </div>
+  } @else {
+    <div class="kpi-grid">
 
-    <article class="kpi-card">
-      <div class="kpi-top">
-        <div class="kpi-icon red-bg" aria-hidden="true">
-          <span class="cl cl-call-info"></span>
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <div class="kpi-icon blue-bg" aria-hidden="true">
+            <span class="cl cl-briefcase"></span>
+          </div>
         </div>
-        <span class="badge badge-danger">Prioridad alta</span>
-      </div>
-      <div class="kpi-content">
-        <p>Con errores</p>
-        <h2 class="text-danger">07</h2>
-      </div>
-    </article>
-  </div>
+        <div class="kpi-content">
+          <p>Laboratorios registrados</p>
+          <h2>{{ totalLaboratorios }}</h2>
+        </div>
+      </article>
 
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <div class="kpi-icon teal-bg" aria-hidden="true">
+            <span class="cl cl-download"></span>
+          </div>
+        </div>
+        <div class="kpi-content">
+          <p>Plantillas disponibles</p>
+          <h2>{{ totalPlantillas }}</h2>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <div class="kpi-icon green-bg" aria-hidden="true">
+            <span class="cl cl-ok"></span>
+          </div>
+          @if (periodosAbiertos > 0) {
+            <span class="badge badge-success">{{ periodosAbiertos }} abierto{{ periodosAbiertos > 1 ? 's' : '' }}</span>
+          } @else {
+            <span class="badge badge-secondary">Sin período activo</span>
+          }
+        </div>
+        <div class="kpi-content">
+          <p>Períodos activos</p>
+          <h2>{{ periodosAbiertos }}</h2>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <div class="kpi-icon red-bg" aria-hidden="true">
+            <span class="cl cl-document-verified"></span>
+          </div>
+        </div>
+        <div class="kpi-content">
+          <p>Reportes enviados</p>
+          <h2>{{ totalReportes }}</h2>
+        </div>
+      </article>
+
+    </div>
+  }
+
+  <!-- Tabla de reportes recientes -->
   <section class="table-card" aria-labelledby="recent-title">
     <div class="table-header">
       <h2 id="recent-title">Envíos recientes</h2>
-      <div class="table-actions">
-        <button type="button" class="btn btn-outline-secondary">
-          <span class="cl cl-filter" aria-hidden="true"></span>
-          Filtrar
-        </button>
-        <button type="button" class="btn btn-outline-secondary">
-          <span class="cl cl-download" aria-hidden="true"></span>
-          Exportar
-        </button>
-      </div>
+      <a routerLink="/laboratorios" class="btn btn-outline-secondary">
+        <span class="cl cl-filter" aria-hidden="true"></span>
+        Ver todos
+      </a>
     </div>
 
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Fecha</th>
-          <th>Tipo de datos</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="id-col">#SP-2024-001</td>
-          <td>24 Oct, 2023 | 14:20</td>
-          <td>Calidad del Agua</td>
-          <td><span class="badge badge-success">Validado</span></td>
-          <td><button type="button" class="link-button">Ver detalle</button></td>
-        </tr>
-        <tr>
-          <td class="id-col">#SP-2024-002</td>
-          <td>24 Oct, 2023 | 12:45</td>
-          <td>Muestreo Patológico</td>
-          <td><span class="badge badge-danger">Con errores</span></td>
-          <td><button type="button" class="link-button text-danger">Corregir</button></td>
-        </tr>
-        <tr>
-          <td class="id-col">#SP-2024-003</td>
-          <td>23 Oct, 2023 | 09:15</td>
-          <td>Control de Carga</td>
-          <td><span class="badge badge-secondary">Reemplazado</span></td>
-          <td><button type="button" class="link-button">Historial</button></td>
-        </tr>
-        <tr>
-          <td class="id-col">#SP-2024-004</td>
-          <td>22 Oct, 2023 | 16:30</td>
-          <td>Talla y Peso</td>
-          <td><span class="badge badge-success">Validado</span></td>
-          <td><button type="button" class="link-button">Ver detalle</button></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="pagination">
-      <span class="pagination-info">Mostrando 4 de 1.284 resultados</span>
-      <div class="pagination-controls">
-        <button type="button" class="page-btn" aria-label="Página anterior"><span class="cl cl-m-arrow-left" aria-hidden="true"></span></button>
-        <button type="button" class="page-btn active" aria-current="page">1</button>
-        <button type="button" class="page-btn">2</button>
-        <button type="button" class="page-btn">3</button>
-        <button type="button" class="page-btn" aria-label="Página siguiente"><span class="cl cl-m-arrow-right" aria-hidden="true"></span></button>
+    @if (isLoading) {
+      <div class="table-loading">
+        <div class="spinner"></div>
+        <p>Cargando datos...</p>
       </div>
-    </div>
+    } @else if (reportesRecientes.length === 0) {
+      <div class="empty-state">
+        <span class="cl cl-document-verified empty-icon" aria-hidden="true"></span>
+        <p>Aún no hay reportes enviados.</p>
+        <a routerLink="/laboratorios" class="btn btn-primary">Cargar primer reporte</a>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Laboratorio</th>
+            <th>Tipo</th>
+            <th>Período</th>
+            <th>Fecha envío</th>
+            <th>Registros</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of reportesRecientes; track r.id) {
+            <tr>
+              <td class="id-col">{{ r.nombreLaboratorio || '—' }}</td>
+              <td>
+                <span [ngClass]="r.tipo === 'RRA' ? 'badge-tipo rra' : 'badge-tipo far'">
+                  {{ r.tipo }}
+                </span>
+              </td>
+              <td>{{ nombreMes(r.mes) }} {{ r.anio }}</td>
+              <td>{{ r.fechaEnvio | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ r.totalRegistros }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   </section>
 
   <footer class="dashboard-footer">
-    <span>Sernapesca Hub - Departamento de Tecnologías de Información</span>
+    <span>Sernapesca Hub · Departamento de Tecnologías de Información</span>
     <div class="footer-links">
       <button type="button" class="link-button">Términos de Servicio</button>
       <button type="button" class="link-button">Política de Privacidad</button>
     </div>
   </footer>
+
 </section>

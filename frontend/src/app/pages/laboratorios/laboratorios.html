@@ -109,14 +109,21 @@
           <span class="cl cl-search" aria-hidden="true"></span>
           <input id="search-validation" type="search" placeholder="Buscar por folio, muestra o análisis" (input)="onSearch($any($event.target).value)" />
         </label>
-        <div class="toolbar-actions">
-          <button type="button" class="btn btn-outline-secondary">
-            <span class="cl cl-filter" aria-hidden="true"></span>
-            Filtrar
-          </button>
-          <button type="button" class="btn btn-outline-secondary">
+        <div class="lab-toolbar-actions status-filters" role="group" aria-label="Filtrar por estado">
+          <button type="button" class="btn" [class.btn-primary]="statusFilter === 'todos'" [class.btn-outline-secondary]="statusFilter !== 'todos'" (click)="setStatusFilter('todos')">
             <span class="cl cl-list" aria-hidden="true"></span>
-            Ordenar
+            Todos
+            @if (validationResult) { <span class="chip-count">{{ validationResult.totalRows }}</span> }
+          </button>
+          <button type="button" class="btn" [class.btn-primary]="statusFilter === 'errores'" [class.btn-outline-secondary]="statusFilter !== 'errores'" (click)="setStatusFilter('errores')">
+            <span class="cl cl-call-info" aria-hidden="true"></span>
+            Con errores
+            @if (validationResult) { <span class="chip-count">{{ validationResult.errorRows }}</span> }
+          </button>
+          <button type="button" class="btn" [class.btn-primary]="statusFilter === 'validos'" [class.btn-outline-secondary]="statusFilter !== 'validos'" (click)="setStatusFilter('validos')">
+            <span class="cl cl-ok" aria-hidden="true"></span>
+            Validados
+            @if (validationResult) { <span class="chip-count">{{ validationResult.validRows }}</span> }
           </button>
         </div>
       </section>
