@@ -1,31 +1,39 @@
 .login-layout {
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
   display: flex;
   align-items: stretch;
   width: 100%;
   background: var(--light);
+  padding: 0;
+  overflow: hidden;
 }
 
 .left-panel {
   flex: 0 0 44%;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   background: var(--tertiary);
   color: #ffffff;
-  padding: 4rem;
+  padding: 3rem 4rem;
+  box-sizing: border-box;
 }
 
 .left-content {
   max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .gov-brand {
   width: 92px;
   height: 8px;
   display: flex;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  flex-shrink: 0;
 }
 
 .brand-bar.blue {
@@ -43,7 +51,8 @@
   align-items: center;
   height: 48px;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
 }
 
 .logo-box {
@@ -86,6 +95,18 @@
   color: #ffffff;
 }
 
+.system-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .75rem;
+  background: rgba(255,255,255,.1);
+  color: white;
+  font-size: .875rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
 .institutional-card {
   border-left: 4px solid var(--secondary);
   background: rgba(255, 255, 255, 0.08);
@@ -103,32 +124,40 @@
 .footer-left {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  align-items: center;
+  
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  padding: 1.25rem 0 0 0;
   border-top: 1px solid rgba(255, 255, 255, 0.18);
-  padding-top: 1.25rem;
   color: #d7e0ea;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   margin-top: auto;
-  position: relative;
-  top: 15px
+  flex-shrink: 0;
 }
 
 .right-panel {
   flex: 1;
+  height: 100vh;
   min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  overflow-y: auto;
 }
 
 .login-form-container {
   width: 100%;
   max-width: 440px;
-  padding: 2rem;
-  overflow: hidden;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .login-header {
@@ -176,8 +205,14 @@
 .input-icon {
   position: absolute;
   left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 18px;
+  height: 18px;
+
   color: var(--primary);
-  font-size: 1.125rem;
+  pointer-events: none;
 }
 
 .input-wrapper input {
@@ -217,7 +252,24 @@
   text-decoration: underline;
 }
 
-.btn-primary svg { width: 18px; height: 18px; }
+.login-submit-btn {
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.login-submit-btn:hover {
+  filter: brightness(0.95);
+}
 
 .error-alert {
   background-color: #fef2f2;
@@ -272,8 +324,10 @@
   }
 
   .login-form-container {
-    max-width: 100%;
-    padding: 1.5rem;
+    background: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
   }
 
   .login-header h2 {

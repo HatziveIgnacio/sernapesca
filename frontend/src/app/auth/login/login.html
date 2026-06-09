@@ -20,7 +20,7 @@
         Plataforma institucional para la gestión de reportes, validación y trazabilidad de laboratorios.
       </p>
 
-      <div class="badge badge-primary">
+      <div class="system-badge">
         <span class="cl cl-document-verified" aria-hidden="true"></span>
         Sistema Centralizado de Validación
       </div>
@@ -29,16 +29,16 @@
         <strong>Servicio Nacional de Pesca y Acuicultura</strong>
         <span>Ministerio de Economía, Fomento y Turismo</span>
       </div>
-    </div>
 
-    <footer class="footer-left">
-      <span>SERNAPESCA</span>
-      <span>Gobierno de Chile</span>
-    </footer>
+      <footer class="footer-left">
+        <span>SERNAPESCA</span>
+        <span>Gobierno de Chile</span>
+      </footer>
+    </div>
   </section>
 
   <section class="right-panel" aria-labelledby="login-title">
-    <div class="login-form-container card">
+    <div class="login-form-container">
       <div class="login-header">
         <p class="login-kicker">Acceso institucional</p>
         <h2 id="login-title" class="line line-primary">Acceso al Sistema</h2>
@@ -70,13 +70,10 @@
           <div class="error-alert">{{ errorMessage }}</div>
         }
 
-        <button type="submit" class="btn btn-primary" [disabled]="isLoading" aria-label="Iniciar sesión">
+        <button type="submit" class=" login-submit-btn" [disabled]="isLoading" aria-label="Iniciar sesión">
           @if (isLoading) { Iniciando sesión... } @else {
             Iniciar Sesión
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
+            <span class="cl cl-arrow-right"></span>
           }
         </button>
 
