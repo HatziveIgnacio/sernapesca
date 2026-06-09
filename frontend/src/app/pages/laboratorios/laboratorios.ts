@@ -29,16 +29,44 @@ export class Laboratorios {
   currentPage = 1;
   readonly pageSize = PAGE_SIZE;
 
+  /** Filtro por estado: todos | solo errores | solo validados */
+  statusFilter: 'todos' | 'errores' | 'validos' = 'todos';
+
   private get filteredRows(): RowResult[] {
     if (!this.validationResult) return [];
+
+    let rows = this.validationResult.rows;
+
+    // 1. Filtro por estado
+    if (this.statusFilter === 'errores') {
+      rows = rows.filter((row) => !row.isValid);
+    } else if (this.statusFilter === 'validos') {
+      rows = rows.filter((row) => row.isValid);
+    }
+
+    // 2. Filtro por término de búsqueda
     const term = this.searchTerm.toLowerCase();
-    if (!term) return this.validationResult.rows;
-    return this.validationResult.rows.filter((row) => {
-      const d = row.display;
-      const displayStr = `${d.codigoMuestra} ${d.nInforme} ${d.analisis} ${d.valorObtenido}`.toLowerCase();
-      const errs = row.errors.map((e) => e.message + e.column).join(' ').toLowerCase();
-      return displayStr.includes(term) || errs.includes(term);
+    if (term) {
+      rows = rows.filter((row) => {
+        const d = row.display;
+        const displayStr = `${d.codigoMuestra} ${d.nInforme} ${d.analisis} ${d.valorObtenido}`.toLowerCase();
+        const errs = row.errors.map((e) => e.message + e.column).join(' ').toLowerCase();
+        return displayStr.includes(term) || errs.includes(term);
+      });
+    }
+
+    // 3. Ordenar: primero los registros con errores, luego los validados.
+    //    Dentro de cada grupo se conserva el orden original del Excel.
+    return [...rows].sort((a, b) => {
+      if (a.isValid === b.isValid) return a.rowNumber - b.rowNumber;
+      return a.isValid ? 1 : -1; // inválidos primero
     });
+  }
+
+  setStatusFilter(filter: 'todos' | 'errores' | 'validos') {
+    this.statusFilter = filter;
+    this.currentPage = 1;
+    this.cdr.detectChanges();
   }
 
   get pagedRows(): RowResult[] {
@@ -147,6 +175,7 @@ export class Laboratorios {
     this.currentStep = 1;
     this.searchTerm = '';
     this.currentPage = 1;
+    this.statusFilter = 'todos';
     this.selectedErrorRow = null;
     this.isFinalizing = false;
     this.finalizadoMsg = null;

@@ -250,6 +250,27 @@ section.toolbar.card {
   color: var(--text-strong);
 }
 
+/* ── Contador dentro de los botones de filtro por estado ─────────────────── */
+.status-filters .chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 0.35rem;
+  margin-left: 0.4rem;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* En el botón activo (btn-primary) el contador va translúcido sobre el fondo */
+.status-filters .btn-primary .chip-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
 .lab-toolbar-actions {
   display: flex !important;
   align-items: center;
