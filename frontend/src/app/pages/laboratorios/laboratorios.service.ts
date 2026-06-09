@@ -32,16 +32,45 @@ export interface ValidationResult {
   rows: RowResult[];
 }
 
+export interface FinalizarResult {
+  reporteId: number;
+  tipo: TemplateType;
+  anio: number;
+  mes: number;
+  nombreLaboratorio: string;
+  totalRegistros: number;
+  mensaje: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class LaboratoriosService {
   private readonly http = inject(HttpClient);
-  private readonly apiBase = `${environment.nestApi}/laboratorios`;
+  private readonly apiBase = `${environment.javaApi}/laboratorios`;
 
-  uploadFile(file: File, templateType: TemplateType): Observable<ValidationResult> {
+  /**
+   * Sube el reporte del laboratorio para validar. anio/mes son opcionales:
+   * si se omiten, el backend valida contra el período ABIERTO más reciente.
+   */
+  uploadFile(file: File, templateType: TemplateType, anio?: number, mes?: number): Observable<ValidationResult> {
     const form = new FormData();
     form.append('file', file);
     form.append('templateType', templateType);
+    if (anio != null) form.append('anio', String(anio));
+    if (mes != null) form.append('mes', String(mes));
     return this.http.post<ValidationResult>(`${this.apiBase}/upload`, form);
+  }
+
+  /**
+   * Finaliza y sube el reporte validado a SERNAPESCA. El backend lo re-valida y,
+   * si no hay errores, persiste los registros para el consolidado del período.
+   */
+  finalizar(file: File, templateType: TemplateType, anio?: number, mes?: number): Observable<FinalizarResult> {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('templateType', templateType);
+    if (anio != null) form.append('anio', String(anio));
+    if (mes != null) form.append('mes', String(mes));
+    return this.http.post<FinalizarResult>(`${environment.javaApi}/reportes/finalizar`, form);
   }
 
   downloadPlantilla(templateType: TemplateType): Observable<Blob> {

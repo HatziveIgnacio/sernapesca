@@ -1,5 +1,6 @@
 package cl.sernapesca.periodo;
 
+import cl.sernapesca.laboratorio.validators.PlantillaRulesExtractorService;
 import cl.sernapesca.periodo.dto.CrearPeriodoRequest;
 import cl.sernapesca.plantillas.PlantillaMetadata;
 import cl.sernapesca.plantillas.PlantillaService;
@@ -8,10 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -23,6 +26,7 @@ public class PeriodoReporteService {
 
     private final PeriodoReporteRepository repository;
     private final PlantillaService plantillaService;
+    private final PlantillaRulesExtractorService rulesExtractor;
 
     @Transactional(readOnly = true)
     public List<PeriodoReporte> listar() {
@@ -71,6 +75,10 @@ public class PeriodoReporteService {
         PeriodoReporte guardado = repository.save(nuevo);
         log.info("Período creado: id={} {}/{} tipo={}", guardado.getId(),
                 guardado.getMes(), guardado.getAnio(), guardado.getTipo());
+
+        if (guardado.getPlantillaId() != null && !guardado.getPlantillaId().isBlank()) {
+            extraerReglasSeguro(guardado);
+        }
         return guardado;
     }
 
@@ -102,7 +110,47 @@ public class PeriodoReporteService {
         }
         validarPlantilla(plantillaId, p.getTipo());
         p.setPlantillaId(plantillaId);
-        return repository.save(p);
+        PeriodoReporte guardado = repository.save(p);
+        extraerReglasSeguro(guardado);
+        return guardado;
+    }
+
+    /**
+     * Extracción manual de reglas (endpoint POST /api/periodos/{id}/extraer-reglas).
+     * Propaga errores para que el usuario sepa si falló.
+     */
+    @Transactional
+    public PlantillaRulesExtractorService.ExtraccionResumen extraerReglas(Long id) {
+        PeriodoReporte p = obtener(id);
+        if (p.getPlantillaId() == null || p.getPlantillaId().isBlank()) {
+            throw new IllegalStateException("El período no tiene plantilla vinculada");
+        }
+        Path archivo = resolverArchivoPlantilla(p);
+        try {
+            return rulesExtractor.extraerYGuardar(archivo, p.getId());
+        } catch (Exception e) {
+            throw new RuntimeException("Error extrayendo reglas de la plantilla: " + e.getMessage(), e);
+        }
+    }
+
+    // ── Helpers de extracción ──────────────────────────────────────────────
+
+    /** Gatillo automático: loguea el error sin abortar el alta/vinculación del período. */
+    private void extraerReglasSeguro(PeriodoReporte p) {
+        try {
+            Path archivo = resolverArchivoPlantilla(p);
+            var resumen = rulesExtractor.extraerYGuardar(archivo, p.getId());
+            log.info("Reglas extraídas para período {}: {} valores", p.getId(), resumen.totalValores());
+        } catch (Exception e) {
+            log.warn("No se pudieron extraer reglas del período {} (se puede reintentar manualmente): {}",
+                    p.getId(), e.getMessage());
+        }
+    }
+
+    private Path resolverArchivoPlantilla(PeriodoReporte p) {
+        Optional<Path> archivo = plantillaService.obtenerArchivo(p.getPlantillaId());
+        return archivo.orElseThrow(() -> new NoSuchElementException(
+                "No se encontró el archivo de la plantilla " + p.getPlantillaId()));
     }
 
     // ── Validaciones internas ──────────────────────────────────────────────

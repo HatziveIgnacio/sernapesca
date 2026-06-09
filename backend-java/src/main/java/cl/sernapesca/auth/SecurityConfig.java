@@ -22,7 +22,8 @@ public class SecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeHttpRequests()
-              .requestMatchers("/api/auth/**", "/actuator/**").permitAll()
+              .requestMatchers("/api/auth/**", "/actuator/**", "/h2-console/**").permitAll()
+              .requestMatchers("/api/**").permitAll() // TODO: quitar cuando el frontend tenga JWT
               .anyRequest().authenticated()
             .and()
             .cors();

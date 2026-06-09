@@ -127,6 +127,41 @@ export class Periodos {
     });
   }
 
+  descargandoId: number | null = null;
+
+  descargarConsolidado(p: PeriodoDto) {
+    this.descargandoId = p.id;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.periodosSvc.descargarConsolidado(p.tipo, p.anio, p.mes).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `consolidado_${p.tipo.toLowerCase()}_${p.anio}_${String(p.mes).padStart(2, '0')}.xlsx`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.descargandoId = null;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.descargandoId = null;
+        // El backend devuelve el error como Blob; lo leemos para mostrar el mensaje
+        if (err?.error instanceof Blob) {
+          err.error.text().then((txt: string) => {
+            try { this.errorMessage = JSON.parse(txt).message; }
+            catch { this.errorMessage = `No hay reportes validados para ${p.tipo} ${this.nombreMes(p.mes)} ${p.anio}`; }
+            this.cdr.detectChanges();
+          });
+        } else {
+          this.errorMessage = this.extractError(err, 'No se pudo generar el consolidado');
+          this.cdr.detectChanges();
+        }
+      }
+    });
+  }
+
   nombreMes(mes: number): string {
     return this.meses[mes - 1] ?? String(mes);
   }

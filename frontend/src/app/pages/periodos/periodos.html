@@ -104,11 +104,16 @@
               <td>{{ p.fechaCierre ? (p.fechaCierre | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
               <td>{{ p.consolidadoSolicitado ? '✓ Solicitado' : '—' }}</td>
               <td>
-                @if (p.estado === 'ABIERTO') {
-                  <button class="btn-danger" (click)="cerrar(p)">Cerrar</button>
-                } @else {
-                  <span class="text-muted">Cerrado</span>
-                }
+                <div class="acciones">
+                  @if (p.estado === 'ABIERTO') {
+                    <button class="btn-danger" (click)="cerrar(p)">Cerrar</button>
+                  } @else {
+                    <span class="text-muted">Cerrado</span>
+                  }
+                  <button class="btn-outline" (click)="descargarConsolidado(p)" [disabled]="descargandoId === p.id">
+                    {{ descargandoId === p.id ? 'Generando…' : 'Consolidado' }}
+                  </button>
+                </div>
               </td>
             </tr>
           }

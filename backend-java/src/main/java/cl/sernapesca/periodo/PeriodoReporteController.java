@@ -51,4 +51,16 @@ public class PeriodoReporteController {
     public PeriodoDto vincularPlantilla(@PathVariable Long id, @RequestBody Map<String, String> body) {
         return PeriodoDto.from(service.vincularPlantilla(id, body.get("plantillaId")));
     }
+
+    /** Re-extrae las listas maestras de la plantilla vinculada al período. */
+    @PostMapping("/{id}/extraer-reglas")
+    public ResponseEntity<?> extraerReglas(@PathVariable Long id) {
+        var resumen = service.extraerReglas(id);
+        return ResponseEntity.ok(Map.of(
+                "periodoId", resumen.periodoId(),
+                "totalValores", resumen.totalValores(),
+                "porCampo", resumen.porCampo(),
+                "mensaje", "Reglas extraídas correctamente desde la plantilla."
+        ));
+    }
 }
